@@ -18,16 +18,16 @@ Built at c0mpiled-17 Seoul, 2026-11-09, for the Self-Maintaining APIs track.
 
 | Game | Issue | Upgrade pull request | Play verdict |
 | --- | --- | --- | --- |
-| Quick 3D RPG, three.js r118 → r162 | TODO(live) | TODO(live) | [CI comment](https://github.com/DaedalGames/auto-hit/pull/1#issuecomment-6730606274) |
-| Crossy Road, three.js r99 → r162 | TODO(live) | TODO(live) | TODO(live) |
+| Quick 3D RPG, three.js r118 → r162 | [#2](https://github.com/DaedalGames/auto-hit/issues/2) | [#3](https://github.com/DaedalGames/auto-hit/pull/3) · open | [Auto verdict](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730924781) |
+| Crossy Road, three.js r99 → r162 | [#4](https://github.com/DaedalGames/auto-hit/issues/4) · closed | [#5](https://github.com/DaedalGames/auto-hit/pull/5) · merged | [PASS](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731006844) after [4 fixes](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6730986797), max 0.10% differ |
 
 ## Why play the upgrade?
 
 | Approach | What happens | Evidence |
 | --- | --- | --- |
 | A. Version bump only | The game shows a black screen: `Failed to resolve module specifier three`. Whether existing checks would let it merge is **TODO(live)**. | [Bump probe](docs/media/probe-results.json) (`runs.r162-bump`) |
-| B. Bump + code review | Reviewers read the change; whether CodeRabbit, gstack /review or open-code-review catches the FBX color shift is **TODO(live)**. | [Fix 2 replay](docs/media/probe-results.json) (`diffs.r118-a vs r162-fix2-a`): 7.58–24.87% of pixels differ. |
-| C. Hit + Auto | A deterministic replay exposes the change; after three fixes the four sampled frames pass at 0.0202–0.0393% difference. | [Probe measurements](docs/media/probe-results.json) (`diffs.r118-a vs r162-fix3-a`); [real PR comment](https://github.com/DaedalGames/auto-hit/pull/1#issuecomment-6730606274). |
+| B. Bump + code review | The scoped review identified texture color-space and lighting regressions; open-code-review flagged two texture encoding bugs. It did not run exploratory play. | [Quick 3D RPG review](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730990776); [Crossy Road review](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731253101). |
+| C. Hit + Auto | Crossy Road passed after four fixes, with a maximum 0.10% difference across the sampled frames. The independent Quick 3D RPG probe passed four frames after three fixes at 0.0202–0.0393%. | [Crossy Road verdict](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731006844) and [fix history](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6730986797); [probe measurements](docs/media/probe-results.json) (`diffs.r118-a vs r162-fix3-a`). |
 
 The standalone probe compares four frames at steps 1, 60, 120 and 180 against a 0.1% pixel-difference limit. A twice-run baseline differed by **0 pixels** at those frames. The pass is not a claim about every frame: the same capture exceeded the limit at steps 6 and 8. The real CI comment is a separate run; its verdict is the evidence for that PR.
 
