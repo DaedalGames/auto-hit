@@ -8,7 +8,7 @@
 
 COGGS Hit upgrades your game; COGGS Auto plays the pull request and catches what a code diff cannot show.
 
-https://github.com/user-attachments/assets/7a0dbf9d-cd4f-4c8b-96d6-b00e5648b9d3
+https://github.com/user-attachments/assets/b29ee074-98c6-4233-947c-98e15d489651
 
 The 90-second demo above runs on this repository's own issues and pull requests: Hit files the issue, opens the upgrade, Daedal Ping posts Auto's verdict, Hit fixes until PASS, and the merge closes the issue.
 
