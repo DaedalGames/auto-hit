@@ -11,9 +11,9 @@ COGGS Hit keeps a shipped game alive when its engine moves: it opens the upgrade
 | Pro | $249 | 15 | 3 | Hit watches engine releases and store deadlines and opens the PR unasked; a private brain of the studio's own solved causes |
 | Heavy | $499 | 25 | 10 | The same for a studio running a catalog |
 | Studio contract | from $5,000, yearly | 200 | 3 titles | Engine and platform ports, consoles and SDK deadlines under contract, with a named engineer |
-| LiveOps contract | $15,000 per live title | 600 | 1 title | A live title at a major publisher: Hit and Auto on every LiveOps update, a private brain, a named engineer and an SLA |
+| LiveOps contract | $15,000 per live title | 600 | 1 title | A live title at a major publisher: COGGS Live runs it, with Auto playing every LiveOps update, a private brain, a named engineer and an SLA |
 
-A fix is one COGGS Hit attempt: one coding-agent run that edits the game and pushes, after which Auto plays it. A top-up fix costs $19 on every paid plan. There is no yearly discount at launch; both contracts are yearly by nature. Tier names follow the COGGS ladder (Free, Hobby, Pro, Heavy), and the studio and publisher offers are contracts rather than self-serve tiers, as COGGS keeps them.
+The LiveOps contract stays a price on this ladder, but the live operations it buys after launch belong to COGGS Live (working title, founder ruling 2026-11-09); COGGS Hit ends at distribution: publishing, review passing, release, launch and keeping the game listed. A fix is one COGGS Hit attempt: one coding-agent run that edits the game and pushes, after which Auto plays it. A top-up fix costs $19 on every paid plan. There is no yearly discount at launch; both contracts are yearly by nature. Tier names follow the COGGS ladder (Free, Hobby, Pro, Heavy), and the studio and publisher offers are contracts rather than self-serve tiers, as COGGS keeps them.
 
 ## Traction
 

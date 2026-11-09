@@ -132,15 +132,15 @@ One slide each after the FAQ divider, in this order. The quoted line is what he 
 >    Card: game company, COGGS, one line, GTA 7 by 2027
 >
 > F13. Q: What is COGGS?
->    "COGGS is our one-stop AI game platform, from fun design to launch. The COGGS Engine, made of Core, Flow, Wiki and Term, makes the game. Around it, Hit publishes it, Agon runs blind matches, Agora is the creator market, and Jam is the game jam."
->    COGGS는 무엇인가? → 재미 설계부터 출시까지 원스톱 AI 게임 플랫폼. COGGS Engine(Core, Flow, Wiki, Term)이 게임을 만들고, Hit가 퍼블리싱, Agon이 블라인드 경연, Agora가 창작자 마켓, Jam이 게임잼.
->    Card: one-stop, Engine: Core Flow Wiki Term, Hit Agon Agora Jam
+>    "COGGS is our one-stop AI game platform, from fun design to launch. The COGGS Engine, made of Core, Flow, Wiki, Auto, Annals and Term, makes the game. Hit ships it, Live runs it after launch, and Agon, Agora and Jam grow it."
+>    COGGS는 무엇인가? → 재미 설계부터 출시까지 원스톱 AI 게임 플랫폼. COGGS Engine(Core, Flow, Wiki, Auto, Annals, Term)이 게임을 만들고, Hit가 출시하고, Live가 출시 뒤 운영하고, Agon, Agora, Jam이 키웁니다.
+>    Card: Engine: Core Flow Wiki Auto Annals Term, Hit ships, Live runs, Agon Agora Jam grow
 >
 > F14. Q: Where do Hit and Auto fit in COGGS?
->    "Hit is COGGS's AI publisher: it ships a game and keeps it alive. Auto plays the game and judges every change, and Hit calls it. Auto is new and not on our product list yet. Today's demo is Hit's upkeep slice."
->    Hit와 Auto는 COGGS 어디에? → Hit는 COGGS의 AI 퍼블리셔로 게임을 내보내고 살려 둠. Auto는 게임을 플레이해 바뀐 점을 판정하고 Hit가 이를 부름. Auto는 새 모듈이라 아직 제품 목록에 없음. 오늘 데모는 Hit의 유지 보수 부분.
->    Card: Hit: AI publisher, Auto: plays and judges, today: upkeep slice
+>    "Hit is COGGS's AI publisher: it ships a game, gets it through review and keeps it listed. Auto plays the game and judges every change, and Hit calls it. After launch, COGGS Live runs the game. Today's demo is Hit keeping a game listed when its engine moves."
+>    Hit와 Auto는 COGGS 어디에? → Hit는 COGGS의 AI 퍼블리셔로 게임을 내보내고 심의를 통과시키고 스토어에 올려 둠. Auto는 게임을 플레이해 바뀐 점을 판정하고 Hit가 이를 부름. 출시 뒤 운영은 COGGS Live. 오늘 데모는 엔진이 바뀌어도 Hit가 게임을 계속 올려 두는 장면.
+>    Card: Hit ships and keeps listed, Auto plays and judges, Live runs after launch
 
 Sources for the FAQ: the 89 of 91 frames are `wow-video.local/diffs/diffs.json` heads.vfix3 (fails only f006 0.33% and f008 0.14%); the brain answer is `hit/out/5.jsonl`, where the brain hit `three-r152-color-management-legacy-lights` came before fix 3 and that fix's verdict fell from 92.83% to 0.12%; the rest are [docs/PITCH-QA.md](../PITCH-QA.md) and [docs/BM.md](../BM.md). gbrain did not store the pricing data: the prices came from pricing-pick and pricing-sim over 17 saved source pages, so the deck and FAQ 10 say only that.
 
-Sources for F12 to F14: product.md in the company ontology (the Daedal Games and COGGS rows, the COGGS family paragraph, the COGGS Hit row), the IR deck's cover, architecture and vision slides, and coggs SKILL.md. COGGS Auto has no row in the product list; the IR architecture slide shows it as planned. "Number one AI game platform by 2027" stays off the slide and out of the answer, since product.md keeps ranking claims out of outside material until they are measured.
+Sources for F12 to F14: product.md in the company ontology (the Daedal Games and COGGS rows), the IR deck's cover, architecture and vision slides, coggs SKILL.md, and the founder's rulings of 2026-11-09: the COGGS family adds COGGS Auto, COGGS Annals and COGGS Live (working title), the wiki is COGGS Wiki, and Hit ends at distribution (publishing, review passing, release, launch and keeping the game listed) while LiveOps after launch belongs to COGGS Live. "Number one AI game platform by 2027" stays off the slide and out of the answer, since product.md keeps ranking claims out of outside material until they are measured.
