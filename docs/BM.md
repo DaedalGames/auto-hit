@@ -10,9 +10,14 @@ COGGS Hit keeps a shipped game alive when its engine moves: it opens the upgrade
 | Hobby | $79 | 5 | 1 private | Private repository, single-fix top-ups at $19 |
 | Pro | $249 | 15 | 3 | Hit watches engine releases and store deadlines and opens the PR unasked; a private brain of the studio's own solved causes |
 | Heavy | $499 | 25 | 10 | The same for a studio running a catalog |
-| Studio contract | from $2,500, yearly | 200 | 50 | Engine and platform ports, consoles and SDK deadlines under contract, with a named engineer |
+| Studio contract | from $5,000, yearly | 200 | 3 titles | Engine and platform ports, consoles and SDK deadlines under contract, with a named engineer |
+| LiveOps contract | $15,000 per live title | 600 | 1 title | A live title at a major publisher: Hit and Auto on every LiveOps update, a private brain, a named engineer and an SLA |
 
-A fix is one COGGS Hit attempt: one coding-agent run that edits the game and pushes, after which Auto plays it. A top-up fix costs $19 on every paid plan. There is no yearly discount at launch; the Studio contract is yearly by nature. Tier names follow the COGGS ladder (Free, Hobby, Pro, Heavy), and the studio offer is a contract rather than a self-serve tier, as COGGS keeps it.
+A fix is one COGGS Hit attempt: one coding-agent run that edits the game and pushes, after which Auto plays it. A top-up fix costs $19 on every paid plan. There is no yearly discount at launch; both contracts are yearly by nature. Tier names follow the COGGS ladder (Free, Hobby, Pro, Heavy), and the studio and publisher offers are contracts rather than self-serve tiers, as COGGS keeps them.
+
+## Traction
+
+Modules of COGGS Hit + COGGS Auto already run as LiveOps PoCs at major game companies with 10M+ players, including Nexon and Krafton, at ₩15–25M a month ($11.5K–$19.2K at ₩1,300 per dollar). This is the founder's statement of 2026-11-09. It is the one measured price in this document, and the contract tiers are anchored to it: the LiveOps contract at $15,000 a title sits inside the band the PoCs already pay.
 
 ## Why this shape
 
@@ -34,11 +39,24 @@ A competitor can rebuild the replay harness in a week. Three other things compou
 
 ## What the simulation kept
 
+The contract tiers ran separately in [docs/bm/contract-model.mjs](bm/contract-model.mjs). Contract prices are 20 to 40 times the self-serve ones, and with one price scale for both the engine's logit overflows on a $15K buyer. That model has three contract buyers: a live-ops studio, a catalog publisher, and a major-publisher title whose willingness to pay is the PoC band above. It ran 400 worlds on two seeds.
+
+| Contract decision | Result across worlds | Kept |
+| --- | --- | --- |
+| Studio at $5,000 with LiveOps at $15,000 a title | Wins 88% and 83% of worlds on the two seeds, median regret 0, contract gross margin 72% (model estimate) | Yes |
+| A LiveOps tier above Studio at all | Raises profit in every world | Yes |
+| Studio at $2,500 with LiveOps at $15,000 | The step from $2,500 to $15,000 buys too little per dollar (ladder check), and it loses to the $5,000 Studio | No |
+| LiveOps at $20,000 | Loses to $15,000 in every world | No |
+| Raising Studio to $10,000 with no LiveOps tier | Wins in under half the worlds, and the ladder check flags the step over Heavy | No |
+| Dropping Studio and keeping LiveOps alone | Loses in every world | No |
+
+The self-serve ladder below ran in [docs/bm/model.mjs](bm/model.mjs).
+
 Twelve packages ran through `pricing-sim` on [docs/bm/model.mjs](bm/model.mjs) (six buyer segments from open-source maintainer to web game portal, 400 worlds a run, two seeds, and a calibration shift). The launch package above is `final` in the model. Every number in this section is a model estimate under the model's ranges.
 
 | Decision | Result across worlds | Kept |
 | --- | --- | --- |
-| Higher ladder ($79 / $249 / $499 / $2,500) against $49 / $149 / $249 / $1,500 | Higher wins on profit in 78% of worlds; median regret 0 | Yes |
+| Higher ladder ($79 / $249 / $499, with a $2,500 Studio in that run) against $49 / $149 / $249 / $1,500 | Higher wins on profit in 78% of worlds; median regret 0 | Yes; the contract model then moved Studio to $5,000 |
 | Studio contract tier | Raises profit in over 99% of worlds on both seeds | Yes |
 | Single-fix top-ups | $12 top-ups on the lower ladder raise profit in over 99% of worlds; $19 top-ups with the decoy, cancel screen and yearly plan removed beat the plain higher ladder in over 99% | Yes, at $19 |
 | Free tier gives 3 fixes, not plays alone | Plays-only free loses in 96% of worlds | Yes |
@@ -58,6 +76,7 @@ Free-to-paid conversion is where the model is weakest. It lands between 6.9% and
 
 ## Run record
 
+- Contract runs: [docs/bm/contract-model.mjs](bm/contract-model.mjs), seed 20261109 (output sha256 `9457142d...`) and seed 20261110 (`13c9007c...`), 400 worlds, same engine.
 - Engine: LilMSkills `pricing-sim` `scripts/sim.mjs`, sha256 `c3e1633d81b4c11446da9d87374721c49c81b19348ddff2e56b61978336462a9`. It was written before today, so it stays outside this repository; the model file is the part written for this product.
 - Runs: seed 20261109 (output sha256 `fc8f9ef8...`), seed 20261110 (`11f2765a...`), seed 20261109 with `--shift asc=3` (`1bbfab38...`), all 400 worlds.
 - Ladder check: every launch tier clears the free allowance and the rung below.
