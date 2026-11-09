@@ -77,8 +77,8 @@ Keyword card, by line: 1 Games rot; 2 Bran, Daedal Games, Hit + Auto; 3 engine m
 One slide each after the FAQ divider, in this order. The quoted line is what he says.
 
 > F1. Q: Your PASS checks only 4 frames?
->    "We checked every second step, 1 to 180. The final fix passes 89 of 91 frames. The 2 misses are the loading fade, at steps 6 and 8."
->    4프레임만 보나요? → 1~180 사이 짝수 스텝을 다 봤고, 마지막 수정은 91프레임 중 89개 통과. 실패 2개는 로딩 페이드(스텝 6, 8).
+>    "We checked every second step, 1 to 180. The final fix passes 89 of 91 frames. The 2 misses are steps 6 and 8, right after the game loads."
+>    4프레임만 보나요? → 1~180 사이 짝수 스텝을 다 봤고, 마지막 수정은 91프레임 중 89개 통과. 실패 2개는 스텝 6과 8, 게임이 막 로드된 직후.
 >
 > F2. Q: Who pays today?
 >    "Major studios with over ten million players run parts of this as LiveOps pilots, Nexon and Krafton among them, at fifteen to twenty-five million won a month."
