@@ -236,7 +236,11 @@ export async function fixAttempt({ wt, base, game, dep, from, to, verdictFile, v
   const denied = (out.permission_denials || []).map((d) => d.tool_name + ' ' + JSON.stringify(d.tool_input).slice(0, 160));
   const meta = { attempt, seconds: Math.round((Date.now() - t0) / 1000), costUsd: out.total_cost_usd ?? null, turns: out.num_turns ?? null, timedOut: r.timedOut, exit: r.code, denied };
 
-  const changed = (await git(wt, 'status', '--porcelain', '--untracked-files=all')).split('\n').filter(Boolean).map((l) => l.slice(3).replace(/^"|"$/g, ''));
+  // Tracked edits and new files, by name only (status --porcelain lines lose their leading space to trim()).
+  const changed = [...new Set([
+    ...(await git(wt, 'diff', '--name-only', 'HEAD')).split('\n'),
+    ...(await git(wt, 'ls-files', '--others', '--exclude-standard')).split('\n'),
+  ].filter(Boolean))];
   const prefix = gamePrefix(game);
   const problems = [];
   if (r.code !== 0 || r.timedOut || out.is_error) problems.push('claude failed: ' + (r.timedOut ? 'timeout' : String(out.result || r.stderr).slice(0, 300)));
@@ -670,6 +674,7 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import
   }
   process.exitCode = await main(a);
 }
+
 
 
 
