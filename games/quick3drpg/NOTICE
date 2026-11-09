@@ -1,0 +1,3 @@
+Quick_3D_RPG by SimonDev, https://github.com/simondevyoutube/Quick_3D_RPG at commit bfeef5ccd670a1adc1d8d77da94900492e28f471, MIT (see LICENSE).
+Carried unchanged except: the Blender (Blends/) and OBJ/ copies of the models and the three Preview images under resources/ are left out, since the game loads only the FBX, GLTF and texture files.
+three.js stays imported from cdn.jsdelivr.net exactly as upstream writes it; COGGS Auto answers those requests from the three versions pinned in the repository's package.json, so a replay never reaches the CDN.
