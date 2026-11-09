@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118.1/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js';
 
 import {third_person_camera} from './third-person-camera.js';
 import {entity_manager} from './entity-manager.js';
