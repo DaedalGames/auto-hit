@@ -18,7 +18,7 @@ export const RENDERER_ARGS = {
 };
 
 // Runs in the page before any game script.
-function pageClock(seeds) {
+export function pageClock(seeds) {
   const stream = (s) => () => {
     s = (s + 0x6D2B79F5) | 0;
     let t = Math.imul(s ^ (s >>> 15), 1 | s);

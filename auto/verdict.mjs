@@ -24,7 +24,7 @@ export function judgeGame(g) {
   if (g.head.playerError) reasons.push('player error on head: ' + g.head.playerError.split('\n')[0]);
   if (g.base.playerError) reasons.push('player error on base: ' + g.base.playerError.split('\n')[0]);
   const pass = reasons.length === 0 && frames.every((f) => f.pass);
-  return { game: g.game, verdict: pass ? 'PASS' : 'FAIL', frames, newPageErrors: g.newPageErrors, newConsoleErrors: g.newConsoleErrors, three: { base: g.base.three, head: g.head.three }, reasons };
+  return { game: g.game, route: g.route, verdict: pass ? 'PASS' : 'FAIL', frames, newPageErrors: g.newPageErrors, newConsoleErrors: g.newConsoleErrors, three: { base: g.base.three, head: g.head.three }, reasons };
 }
 
 export function judge(raw) {
@@ -48,8 +48,8 @@ export function renderComment(v, { framesUrl } = {}) {
   const lines = [MARKER, '## 🎮 COGGS Auto played this PR · ' + mark(v.verdict === 'PASS'), ''];
   if (!v.games.length) lines.push('No game folder changed in this pull request, so nothing was played.', '');
   for (const g of v.games) {
-    lines.push('### ' + FENCE.slice(0, 1) + 'games/' + g.game + FENCE.slice(0, 1) + ' · ' + mark(g.verdict === 'PASS'), '');
-    lines.push('three.js ' + versions(g.three.base) + ' → ' + versions(g.three.head) + '. Same seed, same inputs, same renderer (' + v.renderer +
+    lines.push('### ' + FENCE.slice(0, 1) + g.game + FENCE.slice(0, 1) + ' · ' + mark(g.verdict === 'PASS'), '');
+    lines.push('three.js ' + versions(g.three.base) + ' → ' + versions(g.three.head) + '. Same seed, same inputs (route ' + FENCE.slice(0, 1) + g.route + FENCE.slice(0, 1) + '), same renderer (' + v.renderer +
       ') on base and head. Rule: three.js e2e, a frame fails above ' + v.rule.maxDifferentPct + '% different pixels, and any new page error fails the run.', '');
     lines.push('| Frame | base | head | diff | Differ |', '| --- | --- | --- | --- | --- |');
     for (const f of g.frames) {
@@ -67,9 +67,9 @@ export function renderComment(v, { framesUrl } = {}) {
     const runReasons = g.reasons.filter((r) => !r.endsWith('new page error(s)'));
     if (runReasons.length) lines.push('Run: ' + runReasons.join('; ') + '.', '');
   }
-  if (v.skipped && v.skipped.length) lines.push('Not played (folder unchanged): ' + v.skipped.map((s) => 'games/' + s).join(', ') + '.', '');
+  if (v.skipped && v.skipped.length) lines.push('Not played (folder unchanged): ' + v.skipped.join(', ') + '.', '');
   const sha = (s) => FENCE.slice(0, 1) + String(s || 'local').slice(0, 7) + FENCE.slice(0, 1);
-  lines.push('<sub>base ' + sha(v.base.sha) + ' · head ' + sha(v.head.sha) + ' · routes in .coggs/depth-first-qa/ · red in the diff column = pixels over the threshold</sub>');
+  lines.push('<sub>base ' + sha(v.base.sha) + ' · head ' + sha(v.head.sha) + ' · red in the diff column = pixels over the threshold</sub>');
   return lines.join('\n') + '\n';
 }
 

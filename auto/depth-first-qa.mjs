@@ -1,8 +1,10 @@
 // COGGS Auto depth-first QA: replays each changed game on base and head along the same route, seed and
 // renderer, compares the captured frames and writes out/raw.json, out/verdict.json and out/comment.md.
-// Routes come from this checkout's .coggs/depth-first-qa/<game>.json, so a pull request cannot change them.
-// Usage: node auto/depth-first-qa.mjs --base <repo> --head <repo> [--out out] [--games all|a,b] [--renderer swiftshader|gpu]
-//        [--base-sha <sha>] [--head-sha <sha>] [--frames-url <url ending in />]
+// Two ways to name the games:
+//   this repository's fixtures: --base <repo> --head <repo> [--games changed|all|a,b], routes from .coggs/depth-first-qa/<game>.json here
+//   one game in any repository: --route <json> --base-game <dir> --head-game <dir> [--game <name>] [--games changed|all]
+// Either way the route is read from the base side, so a pull request cannot change it.
+// Common: [--out out] [--renderer swiftshader|gpu] [--base-sha <sha>] [--head-sha <sha>] [--frames-url <url ending in />]
 // Exits 0 on PASS, 1 on FAIL.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -43,16 +45,20 @@ function newOnly(head, base) {
   return head.filter((m) => { const i = left.indexOf(m); if (i >= 0) { left.splice(i, 1); return false; } return true; });
 }
 
-export async function depthFirstQa({ base, head, out, games = 'changed', renderer = 'swiftshader', baseSha = null, headSha = null, framesUrl = '', log = console.error }) {
-  fs.mkdirSync(out, { recursive: true });
+// The fixture games under games/ in base and head, each with its route in this checkout.
+export function fixtureTargets(base, head, games) {
   const all = fs.readdirSync(ROUTES).filter((f) => f.endsWith('.json')).map((f) => f.slice(0, -5)).sort();
-  const wanted = games === 'all' || games === 'changed' ? all : games.split(',');
-  const raw = { renderer, base: { root: path.resolve(base), sha: baseSha }, head: { root: path.resolve(head), sha: headSha }, games: [], skipped: [] };
-  for (const game of wanted) {
-    const route = readRoute(path.join(ROUTES, game + '.json'));
-    const baseDir = path.join(base, 'games', game), headDir = path.join(head, 'games', game);
+  const names = games === 'all' || games === 'changed' ? all : games.split(',');
+  return names.map((game) => ({ game, routeFile: path.join(ROUTES, game + '.json'), baseDir: path.join(base, 'games', game), headDir: path.join(head, 'games', game) }));
+}
+
+export async function depthFirstQa({ targets, base, head, out, games = 'changed', renderer = 'swiftshader', baseSha = null, headSha = null, framesUrl = '', log = console.error }) {
+  fs.mkdirSync(out, { recursive: true });
+  const raw = { renderer, base: { sha: baseSha }, head: { sha: headSha }, games: [], skipped: [] };
+  for (const { game, routeFile, baseDir, headDir } of targets || fixtureTargets(base, head, games)) {
     if (!fs.existsSync(headDir) || !fs.existsSync(baseDir)) { raw.skipped.push(game); continue; }
     if (games === 'changed' && treeHash(baseDir) === treeHash(headDir)) { raw.skipped.push(game); continue; }
+    const route = readRoute(routeFile);
     const dir = path.join(out, game);
     fs.rmSync(dir, { recursive: true, force: true });
     const sides = {};
@@ -72,7 +78,7 @@ export async function depthFirstQa({ base, head, out, games = 'changed', rendere
     });
     const summary = (r) => ({ three: r.three, pageErrors: r.pageErrors, consoleErrors: r.consoleErrors, failedRequests: r.failedRequests, outsideRequests: r.outsideRequests, randomCalls: r.randomCalls, readySeconds: r.readySeconds, seconds: r.seconds, noCanvas: !!r.noCanvas, readyTimeout: !!r.readyTimeout, playerError: r.playerError || null });
     raw.games.push({
-      game, route: path.relative(ROOT, path.join(ROUTES, game + '.json')).split(path.sep).join('/'), seeds: route.seeds, steps: route.steps,
+      game, route: path.basename(path.dirname(routeFile)) + '/' + path.basename(routeFile), seeds: route.seeds, steps: route.steps,
       base: summary(sides.base), head: summary(sides.head), frames,
       newPageErrors: newOnly(sides.head.pageErrors, sides.base.pageErrors),
       newConsoleErrors: newOnly(sides.head.consoleErrors, sides.base.consoleErrors),
@@ -85,9 +91,11 @@ export async function depthFirstQa({ base, head, out, games = 'changed', rendere
 if (isMain(import.meta.url)) {
   const a = parseArgs(process.argv.slice(2));
   const str = (k, d) => (typeof a[k] === 'string' ? a[k] : d);
+  const one = str('route', null);
+  const targets = one && [{ game: str('game', path.basename(path.resolve(str('head-game', '.')))), routeFile: one, baseDir: str('base-game', '.'), headDir: str('head-game', '.') }];
   const watchdog = setTimeout(() => { console.error('depth-first-qa: watchdog 1500 s'); process.exit(3); }, 1500000);
   const v = await depthFirstQa({
-    base: str('base', '.'), head: str('head', '.'), out: str('out', 'out'), games: str('games', 'changed'), renderer: str('renderer', 'swiftshader'),
+    targets, base: str('base', '.'), head: str('head', '.'), out: str('out', 'out'), games: str('games', 'changed'), renderer: str('renderer', 'swiftshader'),
     baseSha: str('base-sha', null), headSha: str('head-sha', null), framesUrl: str('frames-url', ''),
   });
   clearTimeout(watchdog);
