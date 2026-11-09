@@ -212,10 +212,29 @@ function stageInputs({ wt, dep, from, to, verdictFile, brainFiles }) {
   return { dir, sources };
 }
 
+// The ontology faces that match the failing frames and new page errors, as markdown; null when none match (exit 1).
+export async function ontologyRoute(verdict, game, log) {
+  const tool = path.join(HIT_ROOT, 'tools', 'ontology.mjs');
+  if (!fs.existsSync(tool)) { log({ kind: 'ontology', note: 'tools/ontology.mjs not on this checkout, skipped' }); return null; }
+  const g = gameVerdict(verdict, game);
+  const failing = (g.frames || []).filter((f) => f.pass === false || (typeof f.differPct === 'number' && f.differPct > 0.1));
+  const query = [
+    ...failing.map((f) => 'step ' + f.step + ' ' + (typeof f.differPct === 'number' ? f.differPct + '% of pixels differ, mean luma ' + f.headLuma + ' against ' + f.baseLuma : 'no frame')),
+    ...(g.newPageErrors || []).map(text),
+  ].join('; ').slice(0, 1500);
+  if (!query) return null;
+  const r = await sh(process.execPath, [tool, 'route', query], { allowFail: true, timeoutMs: 60000 });
+  if (r.code === 1) { log({ kind: 'ontology', note: 'no face matched' }); return null; }
+  if (r.code !== 0) throw new Error('ontology route failed: ' + r.stderr);
+  log({ kind: 'ontology', bytes: r.stdout.length });
+  return r.stdout;
+}
+
 // One fix attempt: claude edits GAME_DIR and names cause, evidence and source; Hit checks the change and commits it.
 export async function fixAttempt({ wt, base, game, dep, from, to, verdictFile, verdict, brain, attempt, log }) {
   const done = await fixSubjects(wt, base);
   const { dir, sources } = stageInputs({ wt, dep, from, to, verdictFile, brainFiles: brain?.files || [] });
+  const ontology = await ontologyRoute(verdict, game, log);
   const prompt = [
     fs.readFileSync(path.join(dir, 'hit.md'), 'utf8'),
     '## This attempt',
@@ -225,6 +244,7 @@ export async function fixAttempt({ wt, base, game, dep, from, to, verdictFile, v
     sources.length ? 'SOURCES: ' + sources.join(' , ') : 'SOURCES: none installed; read https://cdn.jsdelivr.net/npm/' + dep + '@<version>/',
     'Fixes so far: ' + (done.length ? done.join(' ; ') : 'none'),
     brain ? '## Known causes from earlier games\n' + brain.text : '',
+    ontology ? '## Where the ontology routes this symptom\n' + ontology : '',
   ].filter(Boolean).join('\n');
   const t0 = Date.now();
   const r = await sh('claude', claudeArgs(), { cwd: wt, input: prompt, timeoutMs: CLAUDE_TIMEOUT_MS, allowFail: true });
@@ -338,7 +358,8 @@ export function guideHits(guideText, gameDir) {
 
 async function ensureLabel(repo, name, color, description) {
   const r = await sh('gh', ['label', 'list', '-R', repo, '--search', name, '--json', 'name']);
-  if (!JSON.parse(r.stdout || '[]').some((l) => l.name === name)) await sh('gh', ['label', 'create', name, '-R', repo, '--color', color, '--description', description]);
+  // --force makes a create that races another Hit run on the same label succeed instead of failing.
+  if (!JSON.parse(r.stdout || '[]').some((l) => l.name === name)) await sh('gh', ['label', 'create', name, '-R', repo, '--color', color, '--description', description, '--force']);
 }
 
 async function bodyFile(name, text) {
@@ -458,7 +479,7 @@ function statusBody({ dep, from, to, rows, state, note }) {
   ].join('\n');
 }
 
-const verdictCell = (s) => (s.verdict === 'PASS' ? '✅ PASS' : '❌ FAIL') + ' · ' + (s.differ.every((f) => f.pct == null) ? s.errors + ' new error' + (s.errors === 1 ? '' : 's') + ', no frame' : 'max ' + pctText(Math.max(...s.differ.map((f) => f.pct ?? 100))) + ' differ' + (s.errors ? ', ' + s.errors + ' new errors' : ''));
+const verdictCell = (s) => (s.verdict === 'PASS' ? '✅ PASS' : '❌ FAIL') + ' · ' + (s.differ.every((f) => f.pct == null) ? s.errors + ' new error' + (s.errors === 1 ? '' : 's') + ', no frame' : 'max ' + pctText(Math.max(...s.differ.map((f) => f.pct ?? 100))) + ' differ' + (s.errors ? ', ' + s.errors + ' new error' + (s.errors === 1 ? '' : 's') : ''));
 
 // After PASS: one lesson per fix commit in the brain/lessons frontmatter shape, then tools/brain.mjs add.
 async function writeLessons({ wt, base, pr, game, dep, from, to, logFile, log }) {
@@ -674,6 +695,9 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import
   }
   process.exitCode = await main(a);
 }
+
+
+
 
 
 
