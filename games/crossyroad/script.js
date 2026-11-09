@@ -149,6 +149,16 @@ function Texture(width, height, rects) {
   rects.forEach(rect => {
     context.fillRect(rect.x, rect.y, rect.w, rect.h);
   });
+  // r99 (WebGL1) resized non-power-of-two mipmapped textures down to the floor power of two; WebGL2 in r162 does not.
+  const potWidth = THREE.MathUtils.floorPowerOfTwo(width);
+  const potHeight = THREE.MathUtils.floorPowerOfTwo(height);
+  if (potWidth !== width || potHeight !== height) {
+    const potCanvas = document.createElement( "canvas" );
+    potCanvas.width = potWidth;
+    potCanvas.height = potHeight;
+    potCanvas.getContext( "2d" ).drawImage( canvas, 0, 0, potWidth, potHeight );
+    return new THREE.CanvasTexture(potCanvas);
+  }
   return new THREE.CanvasTexture(canvas);
 }
 
