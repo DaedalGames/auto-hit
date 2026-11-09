@@ -43,5 +43,5 @@ SOURCE: <guide release and entry> | not in the guide; <file> differs between ver
 
 ## Stop
 
-After three fix attempts without PASS, `hit/run.mjs` adds the label needs-human and posts one comment, which you write when it asks: what still differs, the last verdict's numbers, and the cause you would try next.
+The cap is 6 fix commits on the branch. After 6 fixes without PASS, `hit/run.mjs` adds the label needs-human and updates its status comment with what still differs, the last verdict's numbers, and the cause you would try next, which you write when it asks.
 

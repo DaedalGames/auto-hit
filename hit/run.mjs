@@ -5,7 +5,8 @@
 // Hit runs on this machine with the signed-in claude CLI; git and gh act as the maintainer, so every
 // push starts the COGGS Auto workflow in GitHub Actions.
 // Usage: node hit/run.mjs --game games/<name> --dep three --from <v> --to <v>
-//          [--repo DaedalGames/auto-hit] [--pr <n>] [--max 3] [--no-brain] [--no-merge]
+//          [--repo DaedalGames/auto-hit] [--pr <n>] [--max-fixes 6] [--no-brain] [--no-merge]
+// The cap counts fix(hit) commits on the branch, so resuming a PR with 3 fixes and a cap of 6 allows 3 more.
 //        node hit/run.mjs ... --local --verdict <file> [--branch <name>]   one fix on a local branch, nothing pushed
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -213,7 +214,7 @@ function stageInputs({ wt, dep, from, to, verdictFile, brainFiles }) {
 }
 
 // The ontology faces that match the failing frames and new page errors, as markdown; null when none match (exit 1).
-export async function ontologyRoute(verdict, game, log) {
+export async function ontologyRoute(verdict, game, log, attempt) {
   const tool = path.join(HIT_ROOT, 'tools', 'ontology.mjs');
   if (!fs.existsSync(tool)) { log({ kind: 'ontology', note: 'tools/ontology.mjs not on this checkout, skipped' }); return null; }
   const g = gameVerdict(verdict, game);
@@ -224,9 +225,9 @@ export async function ontologyRoute(verdict, game, log) {
   ].join('; ').slice(0, 1500);
   if (!query) return null;
   const r = await sh(process.execPath, [tool, 'route', query], { allowFail: true, timeoutMs: 60000 });
-  if (r.code === 1) { log({ kind: 'ontology', note: 'no face matched' }); return null; }
+  if (r.code === 1) { log({ kind: 'ontology', attempt, used: false, note: 'no face matched' }); return null; }
   if (r.code !== 0) throw new Error('ontology route failed: ' + r.stderr);
-  log({ kind: 'ontology', bytes: r.stdout.length });
+  log({ kind: 'ontology', attempt, used: true, query, bytes: r.stdout.length });
   return r.stdout;
 }
 
@@ -234,7 +235,7 @@ export async function ontologyRoute(verdict, game, log) {
 export async function fixAttempt({ wt, base, game, dep, from, to, verdictFile, verdict, brain, attempt, log }) {
   const done = await fixSubjects(wt, base);
   const { dir, sources } = stageInputs({ wt, dep, from, to, verdictFile, brainFiles: brain?.files || [] });
-  const ontology = await ontologyRoute(verdict, game, log);
+  const ontology = await ontologyRoute(verdict, game, log, attempt);
   const prompt = [
     fs.readFileSync(path.join(dir, 'hit.md'), 'utf8'),
     '## This attempt',
@@ -475,7 +476,7 @@ function statusBody({ dep, from, to, rows, state, note }) {
     '| --- | --- | --- | --- |',
     ...rows.map((r) => '| ' + r.attempt + ' | ' + (r.sha ? '\u0060' + r.sha.slice(0, 7) + '\u0060' : '') + ' | ' + r.cause + ' | ' + (r.verdict || 'playing…') + ' |'),
     '',
-    note || 'Hit pushes one fix per failed verdict and stops after 3 fixes.',
+    note || 'Hit pushes one fix per failed verdict.',
   ].join('\n');
 }
 
@@ -560,7 +561,7 @@ async function ensureBrain(log) {
 export async function main(a) {
   const game = a.game.replace(/\\/g, '/').replace(/\/$/, '');
   const { dep, from, to } = a;
-  const max = Number(a.max || 3);
+  const max = Number(a['max-fixes'] || a.max || 6);
   const repo = HIT_ROOT;
   const ghRepo = a.repo || 'DaedalGames/auto-hit';
   const useBrain = !a['no-brain'];
@@ -630,13 +631,31 @@ export async function main(a) {
   const log = logger(logFile);
   const watchdog = setTimeout(() => { log({ kind: 'abort', note: 'watchdog 4 h' }); process.exit(3); }, 4 * 3600 * 1000);
   const rows = [{ attempt: 0, sha: await git(wt, 'rev-list', '-1', '--grep', '^build(deps)', 'HEAD'), cause: 'version strings only' }];
-  for (const s of await fixSubjects(wt, base)) rows.push({ attempt: rows.length, cause: s.replace(/^fix\(hit\): /, '') });
+  const shas = (await git(wt, 'log', '--reverse', '--format=%H', '--grep', '^fix(hit):', base + '..HEAD')).split('\n').filter(Boolean);
+  for (const [i, s] of (await fixSubjects(wt, base)).reverse().entries()) rows.push({ attempt: rows.length, sha: shas[i], cause: s.replace(/^fix\(hit\): /, '') });
+  // A resumed run refills the table from the verdicts already logged for this PR.
   let first = null;
+  if (fs.existsSync(logFile)) {
+    for (const e of fs.readFileSync(logFile, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l))) {
+      if (e.kind !== 'verdict' || !rows[e.attempt] || rows[e.attempt].sha !== e.sha) continue;
+      rows[e.attempt].verdict = verdictCell(e) + ' ([run](https://github.com/' + ghRepo + '/actions/runs/' + e.runId + '))';
+      if (e.attempt === 0) first = e;
+    }
+  }
+  let resuming = Boolean(a.pr);
+  if (resuming) {
+    await sh('gh', ['pr', 'edit', String(pr), '-R', ghRepo, '--remove-label', 'needs-human'], { allowFail: true });
+    log({ kind: 'resume', pr, fixes: rows.length - 1, maxFixes: max, brain: useBrain });
+  }
   try {
     for (;;) {
       const sha = await git(wt, 'rev-parse', 'HEAD');
       const fixes = (await fixSubjects(wt, base)).length;
-      await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: 'waiting for COGGS Auto on \u0060' + sha.slice(0, 7) + '\u0060' }));
+      const cap = 'Hit pushes one fix per failed verdict and stops after ' + max + ' fixes.';
+      const known = resuming && rows[rows.length - 1].verdict;
+      await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: resuming ? 'resuming with a cap of ' + max + ' fixes' : 'waiting for COGGS Auto on \u0060' + sha.slice(0, 7) + '\u0060', note: cap }));
+      resuming = false;
+      if (known) await new Promise((res) => setTimeout(res, 3000));
       const v = await awaitVerdict({ sha, outDir, log });
       const s = summarizeVerdict(v.verdict, game);
       if (!first) first = s;
@@ -654,18 +673,18 @@ export async function main(a) {
       }
       if (fixes >= max) {
         await editPrBody(ghRepo, pr, prBody({ game, dep, from, to, issue, first, last: s }));
-        await ensureLabel(ghRepo, 'needs-human', 'B60205', 'COGGS Hit stopped after three fixes without PASS');
+        await ensureLabel(ghRepo, 'needs-human', 'B60205', 'COGGS Hit stopped at its fix cap without PASS');
         await sh('gh', ['pr', 'edit', String(pr), '-R', ghRepo, '--add-label', 'needs-human']);
-        const ask = 'You are COGGS Hit. Three fixes did not reach PASS. From this COGGS Auto verdict, write one sentence naming the cause you would try next, starting with "Hypothesis:". Verdict:\n' + JSON.stringify(gameVerdict(v.verdict, game)).slice(0, 6000);
+        const ask = 'You are COGGS Hit. ' + fixes + ' fixes did not reach PASS. From this COGGS Auto verdict, write one sentence naming the cause you would try next, starting with "Hypothesis:". Verdict:\n' + JSON.stringify(gameVerdict(v.verdict, game)).slice(0, 6000);
         const r = await sh('claude', ['-p', '--safe-mode', '--no-session-persistence', '--tools', ''], { cwd: wt, input: ask, timeoutMs: CLAUDE_TIMEOUT_MS, allowFail: true });
         const next = r.stdout.split('\n').filter(Boolean).pop() || 'Hypothesis: none written.';
-        await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: '🙋 needs a human after ' + fixes + ' fixes', note: 'Still differs: ' + s.differ.map((f) => 'step ' + f.step + ' ' + pctText(f.pct)).join(', ') + ' (limit 0.1%).\n\n' + next }));
+        await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: '🙋 needs a human after ' + fixes + ' fixes', note: 'Stopped at the cap of ' + max + ' fixes. Still differs: ' + s.differ.map((f) => 'step ' + f.step + ' ' + pctText(f.pct)).join(', ') + ' (limit 0.1%).\n\n' + next }));
         log({ kind: 'stop', pr, game: path.basename(game), attemptsToPass: null, fixes, brain: useBrain, next });
         return 1;
       }
       const brain = await brainQuery(symptomOf(v.verdict, game), dep, from, to, log, useBrain);
       rows.push({ attempt: fixes + 1, cause: 'writing fix ' + (fixes + 1) + '…' });
-      await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: 'writing fix ' + (fixes + 1) }));
+      await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: 'writing fix ' + (fixes + 1), note: 'Hit pushes one fix per failed verdict and stops after ' + max + ' fixes.' }));
       let r = await fixAttempt({ wt, base, game, dep, from, to, verdictFile: v.file, verdict: v.verdict, brain, attempt: fixes + 1, log });
       if (!r.ok) r = await fixAttempt({ wt, base, game, dep, from, to, verdictFile: v.file, verdict: v.verdict, brain, attempt: fixes + 1, log });
       if (!r.ok) throw new Error('claude broke the commit rules twice on attempt ' + (fixes + 1) + ': ' + r.problems.join('; '));
@@ -690,11 +709,12 @@ function parseArgs(argv) {
 if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const a = parseArgs(process.argv.slice(2));
   if (!a.game || !a.dep || !a.from || !a.to || (a.local && !a.verdict)) {
-    console.error('usage: node hit/run.mjs --game games/<name> --dep three --from <v> --to <v> [--repo owner/name] [--pr <n>] [--max 3] [--no-brain] [--no-merge]\n       node hit/run.mjs ... --local --verdict <file> [--branch <name>]');
+    console.error('usage: node hit/run.mjs --game games/<name> --dep three --from <v> --to <v> [--repo owner/name] [--pr <n>] [--max-fixes 6] [--no-brain] [--no-merge]\n       node hit/run.mjs ... --local --verdict <file> [--branch <name>]');
     process.exit(2);
   }
   process.exitCode = await main(a);
 }
+
 
 
 
