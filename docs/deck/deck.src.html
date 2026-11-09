@@ -1,0 +1,190 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>COGGS Hit + COGGS Auto · c0mpiled-17 pitch</title><meta name="viewport" content="width=1280"><style>
+@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:block;src:url({{a:instrument-serif.woff2}}) format('woff2')}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:block;src:url({{a:instrument-serif-italic.woff2}}) format('woff2')}
+@font-face{font-family:'Geist';font-style:normal;font-weight:400;font-display:block;src:url({{a:geist-400.woff2}}) format('woff2')}
+@font-face{font-family:'Geist';font-style:normal;font-weight:500;font-display:block;src:url({{a:geist-500.woff2}}) format('woff2')}
+@font-face{font-family:'Geist Mono';font-style:normal;font-weight:400;font-display:block;src:url({{a:geist-mono-400.woff2}}) format('woff2')}
+@font-face{font-family:'Geist Mono';font-style:normal;font-weight:500;font-display:block;src:url({{a:geist-mono-500.woff2}}) format('woff2')}
+@page{size:1280px 720px;margin:0}
+:root{--cream:#EDE6D6;--ink:#16140F;--night:#0B0712;--nfg:#F3EAF1;--pink:#FF3D8B;--teal:#2FB59B;--serif:'Instrument Serif',serif;--sans:'Geist',sans-serif;--mono:'Geist Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#2a2630}
+body{font-family:var(--sans);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.deck{display:flex;flex-direction:column;align-items:safe center;gap:24px;padding:24px 0}
+.slide{width:1280px;height:720px;overflow:hidden;position:relative;break-after:page;page-break-after:always;flex:none}
+.notes{display:none}
+@media print{html,body{background:none}.deck{display:block;padding:0}.slide{margin:0}#hud{display:none}}
+.pg{position:absolute;inset:0;padding:56px 72px 52px}
+.cream{background:var(--cream);color:var(--ink);--fg:var(--ink);--mut:rgba(22,20,15,.64);--line:rgba(22,20,15,.16)}
+.night{background:var(--night);color:var(--nfg);--fg:var(--nfg);--mut:rgba(243,234,241,.64);--line:rgba(255,255,255,.13)}
+.night::before{content:'';position:absolute;inset:0;background:radial-gradient(900px 520px at 88% 8%,rgba(255,61,139,.12),transparent 62%),radial-gradient(700px 480px at 4% 104%,rgba(47,181,155,.07),transparent 60%);pointer-events:none}
+.pg>*{position:relative}
+.head{display:flex;align-items:baseline;gap:18px;font-family:var(--mono);font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:36px}
+.head span{color:var(--fg)}
+.head em{font-style:normal}
+.head .wm{margin-left:auto;font-family:var(--serif);font-weight:400;font-size:20px;letter-spacing:0;text-transform:none;color:var(--pink)}
+.head .wm i,.logo i{font-style:normal;color:var(--fg);opacity:.75}
+.h1{font-family:var(--serif);font-weight:400;font-size:64px;line-height:1.02;letter-spacing:-.01em;max-width:1100px}
+.h1 i{font-style:italic}
+.h1.xl{font-size:120px;line-height:.94}
+.h1.m{font-size:52px}
+.pk{color:var(--pink)}
+.tl{color:var(--teal)}
+.k{display:block;font-family:var(--mono);font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.lede{font-size:22px;line-height:1.45;color:var(--mut);max-width:900px}
+.mono{font-family:var(--mono)}
+.foot{position:absolute;left:72px;right:72px;bottom:40px;display:flex;gap:36px;font-family:var(--mono);font-size:15px;letter-spacing:.06em;color:var(--mut);border-top:1px solid var(--line);padding-top:14px}
+.src{font-family:var(--mono);font-size:13px;line-height:1.5;color:var(--mut)}
+/* cover */
+.night.cover{background:radial-gradient(1px 1px at 12% 18%,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 27% 72%,rgba(255,255,255,.55),transparent),radial-gradient(1.5px 1.5px at 41% 12%,rgba(255,255,255,.7),transparent),radial-gradient(1px 1px at 55% 84%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 63% 32%,rgba(255,255,255,.6),transparent),radial-gradient(1.5px 1.5px at 74% 9%,rgba(255,255,255,.75),transparent),radial-gradient(1px 1px at 86% 58%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 93% 22%,rgba(255,255,255,.65),transparent),radial-gradient(1px 1px at 8% 88%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 35% 44%,rgba(255,255,255,.4),transparent),radial-gradient(1px 1px at 68% 66%,rgba(255,255,255,.45),transparent),radial-gradient(1px 1px at 81% 90%,rgba(255,255,255,.55),transparent),radial-gradient(1px 1px at 20% 52%,rgba(255,255,255,.35),transparent),radial-gradient(1px 1px at 49% 60%,rgba(255,255,255,.4),transparent),#07040D}
+.night.cover::before{background:radial-gradient(620px 520px at 78% 46%,rgba(255,61,139,.22),transparent 65%),radial-gradient(800px 500px at 10% 110%,rgba(47,181,155,.10),transparent 60%)}
+.cv-l{position:absolute;left:72px;top:150px;width:760px;z-index:2}
+.cv-ping{position:absolute;right:70px;top:70px;height:580px;filter:drop-shadow(0 40px 70px rgba(255,61,139,.30))}
+.logo{font-family:var(--serif);font-size:30px;color:var(--pink);margin-bottom:26px}
+.logo.lockup{display:flex;align-items:baseline;gap:14px}
+.logo.lockup .by{font-family:var(--mono);font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.logo.lockup .dwm{height:24.5px;width:auto;align-self:baseline;transform:translateY(1.21px)}
+.sub{margin-top:30px;font-size:24px;line-height:1.4;color:var(--mut);max-width:640px}
+/* problem */
+.prob{display:grid;grid-template-columns:560px 1fr;gap:44px;margin-top:30px}
+.shotf{border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000}
+.shotf img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.err{margin-top:12px;font-family:var(--mono);font-size:15px;line-height:1.45;color:var(--ink)}
+.err b{color:var(--pink);font-weight:500}
+.side>div{border-top:1px solid var(--line);padding:14px 0 18px}
+.side>div:first-child{border-top:2px solid var(--pink)}
+.side p{font-size:21px;line-height:1.4}
+.side .note{margin-top:8px;font-family:var(--mono);font-size:13px;line-height:1.45;color:var(--mut)}
+/* loop */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:34px}
+.duo>div{border:1px solid var(--line);border-radius:14px;padding:22px 26px;background:rgba(255,255,255,.03)}
+.duo b{display:block;font-family:var(--serif);font-weight:400;font-size:44px;line-height:1;margin:10px 0 12px}
+.duo p{font-size:19px;line-height:1.45;color:var(--mut)}
+.duo .hit b{color:var(--pink)}.duo .auto b{color:var(--teal)}
+.flow{display:flex;align-items:center;gap:10px;margin-top:30px;font-family:var(--mono);font-size:15px;letter-spacing:.04em}
+.flow span{border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:8px 14px;white-space:nowrap}
+.flow span.p{border-color:var(--pink);color:var(--pink)}.flow span.t{border-color:var(--teal);color:var(--teal)}
+.flow i{font-style:normal;font-family:var(--sans);color:var(--mut)}
+.rr{margin-top:28px;font-family:var(--serif);font-size:34px;line-height:1.15}
+/* staircase */
+.stairs{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px}
+.st{display:flex;flex-direction:column}
+.st .im{border-radius:8px;overflow:hidden;border:2px solid rgba(255,61,139,.7);background:#000}
+.st.ok .im{border-color:var(--teal)}
+.st img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.st .k{margin-top:14px}
+.st b{display:block;font-family:var(--serif);font-weight:400;font-size:40px;line-height:1;margin:8px 0 8px;white-space:nowrap}
+.st p{font-size:16px;line-height:1.38;color:var(--mut)}
+.badge{display:inline-block;font-family:var(--mono);font-size:14px;letter-spacing:.1em;border-radius:6px;padding:4px 10px;background:var(--pink);color:#fff;margin-top:4px;align-self:flex-start}
+.st.ok .badge{background:var(--teal);color:#07040D}
+.limit{position:absolute;left:72px;right:72px;bottom:46px;display:flex;gap:40px;border-top:1px solid var(--line);padding-top:14px;font-family:var(--mono);font-size:15px;color:var(--fg)}
+/* real PRs */
+.prs{display:grid;grid-template-columns:400px 400px 1fr;gap:26px;margin-top:26px}
+.gh{border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#fff;height:430px}
+.gh img{display:block;width:108%;margin-left:-4%;}
+.cap{margin-top:10px;font-family:var(--mono);font-size:13px;color:var(--mut)}
+.res>div{border-top:1px solid var(--line);padding:12px 0 14px}
+.res>div:first-child{border-top:2px solid var(--teal)}
+.res b{display:block;font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.05;margin:6px 0 6px}
+.res p{font-size:16.5px;line-height:1.4;color:var(--mut)}
+.live{border:2px dashed var(--pink)!important;border-radius:10px;padding:10px 14px!important;margin-top:6px}
+.live .k{color:var(--pink)}
+.dotl{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pink);margin-right:8px;vertical-align:1px;box-shadow:0 0 0 4px rgba(255,61,139,.2)}
+/* columns */
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:44px}
+.tri>div{border-top:1px solid var(--line);padding-top:16px}
+.tri>div:first-child{border-top:2px solid var(--pink)}
+.tri b{display:block;font-family:var(--serif);font-weight:400;font-size:64px;line-height:1;margin:14px 0 14px}
+.tri b.w{font-size:40px;line-height:1.05}
+.tri p{font-size:18px;line-height:1.45;color:var(--mut)}
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:40px}
+.tiers>div{border-top:1px solid var(--ink);padding-top:12px}
+.tiers>div:first-child{border-top:2px solid var(--pink)}
+.tiers>div.lo{border-top:2px solid var(--pink);background:rgba(255,61,139,.08);padding:12px 12px 14px;margin-top:-1px}
+.tiers b{display:block;font-family:var(--serif);font-weight:400;font-size:40px;line-height:1;margin:10px 0 8px;white-space:nowrap}
+.tiers b small{font-size:18px;color:var(--mut);margin-left:3px}
+.tiers p{font-size:16px;line-height:1.35;color:var(--mut)}
+.unit{margin-top:34px;font-size:21px;line-height:1.45;max-width:1080px}
+.unit b{font-weight:500;color:var(--pink)}
+/* built */
+.built{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:34px}
+.built>div{border-top:2px solid var(--pink);padding-top:14px}
+.built>div+div{border-top-color:var(--teal)}
+.built b{display:block;font-family:var(--serif);font-weight:400;font-size:46px;line-height:1;margin:10px 0 14px}
+.built li{list-style:none;font-size:18px;line-height:1.42;color:var(--mut);padding:9px 0;border-top:1px solid var(--line)}
+.built li code{font-family:var(--mono);font-size:15px;color:var(--fg)}
+/* close */
+.cl-l{position:absolute;left:72px;top:150px;width:860px;z-index:2}
+.cl-l .h1{font-size:62px;line-height:1.08}
+.contact{display:flex;gap:28px;margin-top:44px;font-family:var(--mono);font-size:19px;letter-spacing:.02em}
+.contact span:first-child{color:var(--pink)}
+.cl-gear{position:absolute;right:-40px;bottom:-60px;width:560px}
+/* faq */
+.faq .q{font-family:var(--serif);font-weight:400;font-size:74px;line-height:1.02;letter-spacing:-.01em;max-width:1120px;margin-top:40px}
+.faq .a{margin-top:44px;font-size:32px;line-height:1.38;max-width:1080px;color:var(--fg);border-top:2px solid var(--pink);padding-top:22px}
+.faq .a.s{font-size:27px}
+.faq .src{position:absolute;left:72px;right:72px;bottom:44px}
+.div .h1.xl{margin-top:150px}
+/* present mode */
+body.present{background:#000;overflow:hidden}
+body.present .deck{display:block;padding:0}
+body.present .slide{display:none;position:absolute;left:50%;top:50%;transform-origin:center}
+body.present .slide.on{display:block}
+body.present.shownotes .slide.on .notes{display:block;position:absolute;left:0;right:0;bottom:0;background:rgba(7,4,13,.92);color:#F3EAF1;font-size:20px;line-height:1.4;padding:14px 72px;z-index:9}
+.ar{font-family:'Geist',sans-serif;font-style:normal}
+.duo p{font-size:21px}.duo b{font-size:50px}.rr{font-size:40px;margin-top:40px}.flow{font-size:15px;margin-top:36px;gap:7px}.flow span{padding:8px 11px}
+.stairs{margin-top:40px}.st b{font-size:44px}.st p{font-size:18px}.limit{font-size:16px}
+.tri{margin-top:64px}.tri b{font-size:80px}.tri b.w{font-size:44px}.tri p{font-size:21px}
+.tiers{margin-top:60px}.tiers b{font-size:44px}.tiers p{font-size:18px}.unit{font-size:25px;margin-top:52px}
+.built b{font-size:50px}.built li{font-size:21px;padding:11px 0}.built li code{font-size:17px}
+.side p{font-size:22px}.err{font-size:16px}
+.faq .a{font-size:38px}.faq .a.s{font-size:29px}.faq .src{font-size:14px}
+.prs2{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:22px}
+.prs2{grid-template-columns:1.1fr 1fr}.prs2 .gh{height:340px;display:flex;justify-content:center;align-items:flex-start}.prs2 .gh img{height:100%;width:auto;max-width:100%;object-fit:contain;object-position:top;margin:0}
+.res3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:20px}
+.res3>div{border-top:1px solid var(--line);padding-top:10px}
+.res3>div:first-child{border-top:2px solid var(--teal)}
+.res3 b{display:block;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1;margin:6px 0 6px}
+.res3 p{font-size:17px;line-height:1.38;color:var(--mut)}
+.res3 .live{margin-top:0;padding:8px 12px!important}
+#hud{position:fixed;right:14px;bottom:10px;font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.5);display:none}
+body.present #hud{display:block}
+</style></head><body><div class="deck">
+<section class="slide" id="s1"><div class="pg night cover"><div class="head"><span>01</span><em>c0mpiled-17 · Self-Maintaining APIs</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="cv-l"><div class="logo lockup"><span>COGGS<i> Hit + Auto</i></span><span class="by">by</span><img class="dwm" src="{{a:daedal-wordmark.png}}" alt="Daedal"></div><div class="h1 xl">Games <span class="pk">rot.</span></div><p class="sub">COGGS Hit upgrades the engine. COGGS Auto plays the game to prove it still works.</p></div><img class="cv-ping" src="{{a:ping.webp}}" alt="Ping"><div class="foot"><span>github.com/DaedalGames/auto-hit</span><span>b@daedal.games</span></div><aside class="notes">1. Games rot. 2. I&#39;m Bran Lee from Daedal Games, and these are COGGS Hit and COGGS Auto.</aside></div></section>
+<section class="slide" id="s2"><div class="pg cream"><div class="head"><span>02</span><em>Problem</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="h1 m">The engine moves on. <i class="pk">The game goes black.</i></div><div class="prob"><div><div class="shotf"><img src="{{a:frame-bump.jpg}}" alt="Quick 3D RPG after a three.js version bump: HUD only, no 3D world"></div><p class="err">Quick_3D_RPG · three.js r118 <span class="ar">→</span> r162 · version bump only, 13 files<br><b>Failed to resolve module specifier "three"</b><br>0 of 4 frames draw a 3D world</p></div><div class="side"><div><span class="k">The gap</span><p>No tool in games does this today. Code reviewers read the diff; QA bots play the build; nobody upgrades the engine and proves the game still plays the same.</p></div><div><span class="k">Already paid for</span><p>Modules of this already run as LiveOps PoCs at major game companies with 10M+ players, including Nexon and Krafton, at $11.5K–$19.2K a month.</p><p class="note">Founder statement, 2026-11-09: KRW 15–25M a month, at the pegged 1,300 KRW per USD.</p></div></div></div><aside class="notes">3. When a game engine moves on, the game goes black, and code review can&#39;t see it. 4. No tool in games upgrades the engine and proves the game still plays the same. 5. Nexon and Krafton already run parts of this as LiveOps pilots, at eleven to nineteen thousand dollars a month.</aside></div></section>
+<section class="slide" id="s3"><div class="pg night"><div class="head"><span>03</span><em>Two products, one loop</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="h1 m">Hit writes the fix. <i>Auto plays it and judges it.</i></div><div class="duo"><div class="hit"><span class="k">COGGS Hit · writes code</span><b>Keeps the game alive</b><p>Opens the upgrade pull request, reads why Auto failed it, and pushes one fix per cause, each with its evidence and source.</p></div><div class="auto"><span class="k">COGGS Auto · never writes code</span><b>Plays your game</b><p>Replays the base and the pull request with the same seed, inputs and renderer, compares the frames and posts the verdict.</p></div></div><div class="flow"><span>Issue</span><i>→</i><span class="p">Hit opens PR</span><i>→</i><span class="t">Auto plays base + PR</span><i>→</i><span>Ping posts verdict</span><i>→</i><span class="p">FAIL: Hit pushes fix</span><i>→</i><span class="t">PASS: merge</span></div><p class="rr">Auto never writes game code. Hit never touches the verdict. <span style="color:var(--mut)">Each works alone.</span></p><aside class="notes">6. COGGS Hit writes the upgrade pull request and pushes the fixes. 7. COGGS Auto plays the old game and the new game, frame by frame, and posts the verdict. 8. Auto never writes game code. Hit never touches the verdict.</aside></div></section>
+<section class="slide" id="s4"><div class="pg night"><div class="head"><span>04</span><em>Proof · replay</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="h1 m">Three fixes, <i class="tl">one PASS</i></div><div class="stairs"><div class="st"><div class="im"><img src="{{a:frame-bump.jpg}}" alt=""></div><span class="k">Bump only</span><b>Black</b><span class="badge">FAIL</span><p>No 3D frame, one page error</p></div><div class="st"><div class="im"><img src="{{a:frame-fix1.jpg}}" alt=""></div><span class="k">Fix 1 · renames, GLSL3</span><b>68.20–75.59%</b><span class="badge">FAIL</span><p>of pixels differ from r118</p></div><div class="st"><div class="im"><img src="{{a:diff-fix2.jpg}}" alt=""></div><span class="k">Fix 2 · color, lights</span><b>7.58–24.87%</b><span class="badge">FAIL</span><p>Red = differs. Only the FBX models are off</p></div><div class="st ok"><div class="im"><img src="{{a:frame-fix3.jpg}}" alt=""></div><span class="k">Fix 3 · FBXLoader colors</span><b class="tl">0.0202–0.0393%</b><span class="badge">PASS</span><p>Every checked frame under the limit</p></div></div><div class="limit"><span>Limit 0.1% of pixels (three.js e2e)</span><span>Replay probe · Quick_3D_RPG · steps 1, 60, 120, 180</span></div><aside class="notes">9. The version bump was black. Then seventy-five percent of pixels differed, then twenty-five, then zero point zero two. Pass.</aside></div></section>
+<section class="slide" id="s5"><div class="pg cream"><div class="head"><span>05</span><em>Proof · real pull requests</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="h1 m">Daedal Ping posts the verdict <i>on the PR</i></div><div class="prs2"><figure><div class="gh"><img src="{{a:pr3-hit-table.jpg}}" alt="COGGS Hit table on PR 3: PASS after 7 fixes"></div><figcaption class="cap">PR #3 · COGGS Hit · one fix per cause, 7 fixes</figcaption></figure><figure><div class="gh"><img src="{{a:pr5-auto-top.jpg}}" alt="COGGS Auto PASS comment on PR 5 by daedal-ping[bot]"></div><figcaption class="cap">PR #5 · daedal-ping[bot] · COGGS Auto verdict</figcaption></figure></div><div class="res3"><div><span class="k">PR #3 · Quick 3D RPG · r118 <span class="ar">→</span> r162</span><b class="tl">PASS after 7 fixes</b><p>0.01–0.04% of pixels differ. Merged today, closing issue #2.</p></div><div style="border-top:2px solid var(--teal)"><span class="k">PR #5 · Crossy Road · r99 <span class="ar">→</span> r162</span><b class="tl">PASS after 4 fixes</b><p>0.07–0.10% of pixels differ. Merged today, closing issue #4.</p></div><div><span class="k">PR #3 · review vs play</span><b>73.53% differ</b><p>Code review guessed "darker" at 6/10 confidence. Auto played it and failed it.</p></div></div><aside class="notes">10. Today, on two real pull requests, Hit upgraded both games, Auto passed both, and we merged both.</aside></div></section>
+<section class="slide" id="s6"><div class="pg night"><div class="head"><span>06</span><em>Moat</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="h1 m">A harness takes a week. <i>These compound.</i></div><div class="tri"><div><span class="k">Deterministic replay</span><b>0 px</b><p>Same build played twice: zero pixels change. Seeded randomness, frozen clock, one input route.</p></div><div><span class="k">gbrain lesson memory</span><b class="w">92.83% <span class="ar">→</span> 0.12%</b><p>On game 2, Hit's brain returned game 1's color lesson before fix 3. That fix took Crossy Road from 92.83% to 0.12% of pixels.</p></div><div><span class="k">Game-domain ontology</span><b class="w">Daedal Games reads the game</b><p>Each failing frame maps to engine parts (renderer, loaders, input) and the probes that catch them.</p></div></div><aside class="notes">11. Play it twice and zero pixels change, and every fix becomes a lesson the next game reads first.</aside></div></section>
+<section class="slide" id="s7"><div class="pg cream"><div class="head"><span>07</span><em>Business model</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="h1 m">We sell the fix. <i>The play is free.</i></div><div class="tiers"><div><span class="k">Free</span><b>$0</b><p>3 fixes once, public repos, unlimited Auto plays</p></div><div><span class="k">Hobby</span><b>$79<small>/mo</small></b><p>5 fixes a month, 1 private repo</p></div><div><span class="k">Pro</span><b>$249<small>/mo</small></b><p>15 fixes, Hit watches engine releases</p></div><div><span class="k">Heavy</span><b>$499<small>/mo</small></b><p>25 fixes, 10 repos</p></div><div><span class="k">Studio</span><b>$5,000<small>/mo</small></b><p>From $5,000 a month, billed yearly</p></div><div class="lo"><span class="k pk">LiveOps</span><b>$15,000</b><p>Per live title per month</p></div></div><p class="unit">LiveOps is anchored to what <b>Nexon and Krafton PoCs pay today: $11.5K–$19.2K a month</b>. Auto runs in the customer's own GitHub Actions, free on public repos.</p><p class="src" style="margin-top:14px">Founder statement 2026-11-09, KRW 15–25M at 1,300 KRW per USD · docs/BM.md</p><aside class="notes">12. Public repos are free, teams pay seventy-nine to four ninety-nine a month, and a live title is fifteen thousand.</aside></div></section>
+<section class="slide" id="s8"><div class="pg night"><div class="head"><span>08</span><em>How we built it</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="h1 m">Built on <i>gstack</i> and <i>gbrain</i></div><div class="built"><div><span class="k">gstack · garrytan/gstack, MIT</span><b>The review lens</b><ul><li><code>/review</code> reads every upgrade PR, run by <code>tools/review.mjs</code></li><li><code>office-hours</code> and <code>plan-ceo-review</code> gave the YC-partner lens for daedal-games:partner-grill</li><li>That grill produced <code>docs/PITCH-QA.md</code></li></ul></div><div><span class="k">gbrain · garrytan/gbrain, MIT</span><b>Hit's memory</b><ul><li>Every solved upgrade cause becomes a lesson, queried before every fix (<code>tools/brain.mjs</code>)</li><li>Game 2 read game 1's lessons before its first fix</li><li>The prices came from LilMSkills pricing-pick and pricing-sim on 17 saved price pages: <code>docs/BM.md</code></li></ul></div></div><aside class="notes">13. We built it on Garry Tan&#39;s gstack review and gbrain memory.</aside></div></section>
+<section class="slide" id="s9"><div class="pg cream close"><div class="head"><span>09</span><em>Close</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="cl-l"><div class="h1">CodeRabbit reads your code.<br>COGGS Auto <i>plays your game.</i><br><span class="pk">COGGS Hit keeps it alive.</span></div><div class="contact"><span>github.com/DaedalGames/auto-hit</span><span>b@daedal.games</span></div></div><img class="cl-gear" src="{{a:gear.png}}" alt=""><aside class="notes">14. CodeRabbit reads your code. COGGS Auto plays your game. COGGS Hit keeps it alive.</aside></div></section>
+<section class="slide" id="faq"><div class="pg night div"><div class="head"><span>FAQ</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="h1 xl">Questions<span class="pk">.</span></div><p class="sub">11 answers, one per slide, each from a measurement or the founder's statement.</p></div></section>
+<section class="slide" id="f01"><div class="pg cream faq"><div class="head"><span>FAQ 01</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">Your PASS checks only 4 frames?</div><p class="a">We checked every second step, 1 to 180. The final fix passes 89 of 91 frames. The 2 misses are the loading fade, at steps 6 and 8.</p><p class="src">wow-video diffs.json heads.vfix3: f006 0.33%, f008 0.14%; the 4 steps were committed before Hit opened its PR</p><aside class="notes">We checked every second step, 1 to 180. The final fix passes 89 of 91 frames. The 2 misses are the loading fade, at steps 6 and 8.</aside></div></section>
+<section class="slide" id="f02"><div class="pg cream faq"><div class="head"><span>FAQ 02</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">Who pays today?</div><p class="a">Major studios with over ten million players run parts of this as LiveOps pilots, Nexon and Krafton among them, at fifteen to twenty-five million won a month.</p><p class="src">Founder statement, 2026-11-09 · $11.5K–$19.2K at 1,300 KRW per USD</p><aside class="notes">Major studios with over ten million players run parts of this as LiveOps pilots, Nexon and Krafton among them, at fifteen to twenty-five million won a month.</aside></div></section>
+<section class="slide" id="f03"><div class="pg cream faq"><div class="head"><span>FAQ 03</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">Engine upgrades are rare. Why a subscription?</div><p class="a">Hit watches every engine release and store deadline. Quick 3D RPG is 44 three.js releases behind, Crossy Road was 63. Firebase Test Lab shuts down in September 2027.</p><p class="src">Issues #2 and #4 · firebase.google.com Test Lab usage page</p><aside class="notes">Hit watches every engine release and store deadline. Quick 3D RPG is 44 three.js releases behind, Crossy Road was 63. Firebase Test Lab shuts down in September 2027.</aside></div></section>
+<section class="slide" id="f04"><div class="pg cream faq"><div class="head"><span>FAQ 04</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">Did Hit do it, or did you?</div><p class="a">Hit opened the issues and the pull requests on its own. Every try is a line in its log, and every fix must name its cause and its source, or Hit refuses it.</p><p class="src">hit/out/3.jsonl, hit/out/5.jsonl</p><aside class="notes">Hit opened the issues and the pull requests on its own. Every try is a line in its log, and every fix must name its cause and its source, or Hit refuses it.</aside></div></section>
+<section class="slide" id="f05"><div class="pg cream faq"><div class="head"><span>FAQ 05</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">What does Auto catch that code review misses?</div><p class="a">On PR #3, code review read the diff and guessed the lights look darker, at 6 of 10 confidence. Auto played it: 73.53% of pixels differ.</p><p class="src">PR #3 comments: gstack /review + open-code-review, and COGGS Auto</p><aside class="notes">On PR #3, code review read the diff and guessed the lights look darker, at 6 of 10 confidence. Auto played it: 73.53% of pixels differ.</aside></div></section>
+<section class="slide" id="f06"><div class="pg cream faq"><div class="head"><span>FAQ 06</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">Can Hit cheat the test?</div><p class="a">No. Hit may edit only the game folder. A change to the route, the limit or the judge is refused.</p><p class="src">Refused paths: .coggs/, auto/, hit/, tools/, brain/, the workflow</p><aside class="notes">No. Hit may edit only the game folder. A change to the route, the limit or the judge is refused.</aside></div></section>
+<section class="slide" id="f07"><div class="pg cream faq"><div class="head"><span>FAQ 07</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">What breaks first on a new game?</div><p class="a">The route file, about 30 lines per game. On Crossy Road the bump drew no canvas: THREE is not defined. Auto failed it before anyone merged.</p><p class="src">PR #5, try 0</p><aside class="notes">The route file, about 30 lines per game. On Crossy Road the bump drew no canvas: THREE is not defined. Auto failed it before anyone merged.</aside></div></section>
+<section class="slide" id="f08"><div class="pg cream faq"><div class="head"><span>FAQ 08</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">Is the brain memory, or your answer key?</div><p class="a">It is memory. On game 2, the brain returned game 1's color lesson before fix 3. That fix took the diff from 92.83% to 0.12%.</p><p class="src">hit/out/5.jsonl: brain hit three-r152-color-management-legacy-lights, then fix 3</p><aside class="notes">It is memory. On game 2, the brain returned game 1's color lesson before fix 3. That fix took the diff from 92.83% to 0.12%.</aside></div></section>
+<section class="slide" id="f09"><div class="pg cream faq"><div class="head"><span>FAQ 09</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">What can't a studio rebuild by Friday?</div><p class="a">The harness, yes. The lesson brain, the game-domain ontology and the frame history grow with every pull request we play.</p><p class="src">docs/BM.md, Moat</p><aside class="notes">The harness, yes. The lesson brain, the game-domain ontology and the frame history grow with every pull request we play.</aside></div></section>
+<section class="slide" id="f10"><div class="pg cream faq"><div class="head"><span>FAQ 10</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">How did you build it?</div><p class="a s">With two open tools by Garry Tan. gstack's /review reads every upgrade pull request through tools/review.mjs, and its office-hours and plan-ceo-review gave the YC-partner lens our partner-grill used to write the pitch Q&A. gbrain is Hit's memory: every solved cause is a lesson, queried before every fix. Our prices came from pricing-pick and pricing-sim on 17 saved price pages.</p><p class="src">.coggs/gstack/README.md · tools/brain.mjs · docs/PITCH-QA.md · docs/BM.md</p><aside class="notes">With two open tools by Garry Tan. gstack's /review reads every upgrade pull request through tools/review.mjs, and its office-hours and plan-ceo-review gave the YC-partner lens our partner-grill used to write the pitch Q&A. gbrain is Hit's memory: every solved cause is a lesson, queried before every fix. Our prices came from pricing-pick and pricing-sim on 17 saved price pages.</aside></div></section>
+<section class="slide" id="f11"><div class="pg cream faq"><div class="head"><span>FAQ 11</span><em>Backup</em><b class="wm">COGGS<i> Hit + Auto</i></b></div><div class="q">Why is the agent called Ping?</div><p class="a">In games you ping a spot to call your team. Ping is also network lag, the number every player blames. And it sounds like pink, our brand color.</p><p class="src">docs/PITCH-QA.md</p><aside class="notes">In games you ping a spot to call your team. Ping is also network lag, the number every player blames. And it sounds like pink, our brand color.</aside></div></section>
+</div><div id="hud"></div><script>
+(()=>{const slides=[...document.querySelectorAll('.slide')];const hud=document.getElementById('hud');let i=Math.max(0,slides.findIndex(s=>'#'+s.id===location.hash));
+function fit(){const s=Math.min(innerWidth/1280,innerHeight/720);for(const x of slides)x.style.transform='translate(-50%,-50%) scale('+s+')'}
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>{s.classList.toggle('on',k===i)});hud.textContent=(i+1)+' / '+slides.length+'  ·  N notes  ·  Esc overview';history.replaceState(null,'','#'+slides[i].id)}
+function present(on){document.body.classList.toggle('present',on);if(on){fit();show(i)}else{for(const s of slides)s.style.transform='';slides[i].scrollIntoView()}}
+addEventListener('resize',()=>document.body.classList.contains('present')&&fit());
+addEventListener('keydown',e=>{const p=document.body.classList.contains('present');
+if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();p?show(i+1):present(true)}
+else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();p&&show(i-1)}
+else if(e.key==='Home'){p&&show(0)}else if(e.key==='End'){p&&show(slides.length-1)}
+else if(e.key==='n'||e.key==='N'){document.body.classList.toggle('shownotes')}
+else if(e.key==='Escape'){present(false)}
+else if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}});
+if(!/[?&]print/.test(location.search)&&!navigator.webdriver)present(true);})();
+</script></body></html>
+
