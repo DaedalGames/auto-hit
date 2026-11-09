@@ -1,76 +1,82 @@
 # COGGS Hit + COGGS Auto, c0mpiled-17 finals live pitch
 
-The finals script for [auto-hit-deck.html](./auto-hit-deck.html), read live in English by Bran Lee. The judges first decide from a 90-second video, which is a separate cut; this is what he says on stage after it. One sentence per line, short words, the Korean under each line for rehearsal only. Timed at 150 words a minute and at 120, the pace he rehearses to. Press the right arrow to move on, N to show the notes, Esc for the overview.
+The finals script for [auto-hit-deck.html](./auto-hit-deck.html), read live in English by Bran Lee. The slide faces carry one headline and a few words; everything said and every source sits here and in each slide's speaker notes (press N). One sentence per line, the Korean under each line for rehearsal only, timed at 150 words a minute and at 120, the pace he rehearses to. The 90-second demo plays on the video slide: Space plays or pauses it, the right arrow moves on.
 
-## The pitch (14 lines, 202 words, about 81 seconds at 150 words a minute; about 101 at 120)
+## The pitch (15 lines, 140 words, about 56 seconds at 150 words a minute; about 70 at 120)
 
 > 1. "Games rot."
 >    게임은 썩습니다.
 >
-> 2. "I'm Bran Lee from Daedal Games, and these are COGGS Hit and COGGS Auto."
->    저는 다이달게임즈의 브랜 리이고, 이것이 COGGS Hit와 COGGS Auto입니다.
+> 2. "I'm Bran Lee, and these are COGGS Hit and COGGS Auto."
+>    저는 브랜 리이고, 이것이 COGGS Hit와 COGGS Auto입니다.
 >
-> 3. "When a game engine moves on, the game goes black, and code review can't see it."
->    게임 엔진이 버전을 올리면 게임 화면이 까맣게 되는데, 코드 리뷰로는 그게 안 보입니다.
+> 3. "Watch ninety seconds."
+>    90초만 보시죠.
 >
-> 4. "No tool in games upgrades the engine and proves the game still plays the same."
->    엔진을 올리고 게임이 똑같이 돌아가는지 증명해 주는 도구는 게임 업계에 아직 없습니다.
+> 4. "Bump the engine, and the game goes black."
+>    엔진만 올리면 게임 화면이 까매집니다.
 >
-> 5. "Nexon and Krafton already run parts of this as LiveOps pilots, at eleven to nineteen thousand dollars a month."
->    넥슨과 크래프톤이 이미 이것의 일부를 라이브옵스 PoC로 돌리고 있고, 월 1만 1천~1만 9천 달러입니다.
+> 5. "No tool in games fixes this."
+>    게임 업계에 이걸 고치는 도구가 없습니다.
 >
-> 6. "COGGS Hit writes the upgrade pull request and pushes the fixes."
->    COGGS Hit는 업그레이드 PR을 쓰고 수정을 푸시합니다.
+> 6. "Hit writes the fix. Auto plays it."
+>    Hit가 고치고, Auto가 플레이합니다.
 >
-> 7. "COGGS Auto plays the old game and the new game, frame by frame, and posts the verdict."
->    COGGS Auto는 옛 게임과 새 게임을 프레임 단위로 플레이해 보고 판정을 올립니다.
+> 7. "Auto replays both builds, diffs every pixel, and Ping posts the verdict."
+>    Auto가 두 빌드를 다시 돌려 픽셀을 비교하고, Ping이 판정을 올립니다.
 >
-> 8. "Auto never writes game code. Hit never touches the verdict."
->    Auto는 게임 코드를 절대 쓰지 않고, Hit는 판정에 절대 손대지 않습니다.
+> 8. "Fail, and Hit fixes again. Pass, and it merges."
+>    실패하면 Hit가 다시 고치고, 통과하면 머지됩니다.
 >
-> 9. "The version bump was black. Then seventy-five percent of pixels differed, then twenty-five, then zero point zero two. Pass."
->    버전만 올리면 까만 화면. 그다음 픽셀 75% 다름, 그다음 25%, 그다음 0.02%. 통과.
+> 9. "Black. Seventy-five percent. Twenty-five. Zero point zero two. Pass."
+>    까만 화면. 75%. 25%. 0.02%. 통과.
 >
-> 10. "Today, on two real pull requests, Hit upgraded both games, Auto passed both, and we merged both."
->    오늘 실제 PR 두 개에서 Hit가 두 게임을 모두 올렸고, Auto가 둘 다 통과시켰고, 둘 다 머지했습니다.
+> 10. "Two real pull requests today. Two cleared. Both merged."
+>    오늘 실제 PR 두 개. 둘 다 통과, 둘 다 머지.
 >
-> 11. "Play it twice and zero pixels change, and every fix becomes a lesson the next game reads first."
->    두 번 돌려도 픽셀이 하나도 안 바뀌고, 모든 수정은 다음 게임이 먼저 읽는 교훈이 됩니다.
+> 11. "Nexon and Krafton already run parts of this as LiveOps pilots, at eleven to nineteen thousand dollars a month."
+>    넥슨과 크래프톤이 이미 일부를 라이브옵스 PoC로 돌리고, 월 1만 1천~1만 9천 달러를 냅니다.
 >
-> 12. "Public repos are free, teams pay seventy-nine to four ninety-nine a month, and a live title is fifteen thousand."
->    공개 저장소는 무료, 팀은 월 79~499달러, 라이브 타이틀 하나는 월 1만 5천 달러입니다.
+> 12. "Zero pixels of drift, fifteen lessons, nine engine faces, and it grows with every game."
+>    흔들림 0픽셀, 교훈 15개, 엔진 영역 9개, 게임마다 더 커집니다.
 >
-> 13. "We built it on Garry Tan's gstack review and gbrain memory."
->    개리 탄의 gstack 리뷰와 gbrain 메모리 위에 만들었습니다.
+> 13. "Free for public repos, seventy-nine dollars to start, fifteen thousand per live title."
+>    공개 저장소는 무료, 시작은 79달러, 라이브 타이틀 하나에 1만 5천 달러.
 >
-> 14. "CodeRabbit reads your code. COGGS Auto plays your game. COGGS Hit keeps it alive."
->    CodeRabbit은 코드를 읽습니다. COGGS Auto는 게임을 플레이합니다. COGGS Hit는 게임을 살려 둡니다.
+> 14. "CodeRabbit reads your code. COGGS Auto plays your game."
+>    CodeRabbit은 코드를 읽고, COGGS Auto는 게임을 플레이합니다.
+>
+> 15. "It's open on GitHub today: Daedal Games, auto-hit."
+>    오늘 GitHub에 공개돼 있습니다. DaedalGames/auto-hit.
 
-If the slot is only 45 seconds, say lines 1, 3, 5, 6, 7, 9, 10 and 14.
+If the slot is only 30 seconds, say lines 1, 4, 6, 9, 10, 11, 12 and 14.
+
+The video runs between lines 3 and 4 and adds 90 seconds to the slot.
 
 | Lines | Slide | At 150 words a minute | At 120 |
 | --- | --- | --- | --- |
-| 1 to 2 | 01 Cover | 0:00 to 0:06 | 0:00 to 0:08 |
-| 3 to 5 | 02 Problem | 0:06 to 0:26 | 0:08 to 0:33 |
-| 6 to 8 | 03 Two products, one loop | 0:26 to 0:42 | 0:33 to 0:52 |
-| 9 | 04 Proof, replay | 0:42 to 0:49 | 0:52 to 1:01 |
-| 10 | 05 Proof, real pull requests | 0:49 to 0:56 | 1:01 to 1:10 |
-| 11 | 06 Moat | 0:56 to 1:03 | 1:10 to 1:19 |
-| 12 | 07 Business model | 1:03 to 1:11 | 1:19 to 1:29 |
-| 13 | 08 How we built it | 1:11 to 1:15 | 1:29 to 1:34 |
-| 14 | 09 Close | 1:15 to 1:21 | 1:34 to 1:41 |
+| 1 to 2 | 01 Cover | 0:00 to 0:05 | 0:00 to 0:07 |
+| 3 | Video (90 s plays here) | 0:05 to 0:06 | 0:07 to 0:08 |
+| 4 to 5 | 02 Problem | 0:06 to 0:12 | 0:08 to 0:15 |
+| 6 to 8 | 03 Architecture | 0:12 to 0:23 | 0:15 to 0:29 |
+| 9 | 04 Level meter | 0:23 to 0:27 | 0:29 to 0:34 |
+| 10 | 05 2/2 cleared | 0:27 to 0:30 | 0:34 to 0:38 |
+| 11 | 06 Already paying | 0:30 to 0:38 | 0:38 to 0:48 |
+| 12 | 07 Moat | 0:38 to 0:44 | 0:48 to 0:55 |
+| 13 | 08 Price | 0:44 to 0:49 | 0:55 to 1:01 |
+| 14 to 15 | 09 Close | 0:49 to 0:56 | 1:01 to 1:10 |
 
-Keyword card, by line: 1 Games rot; 2 Bran, Daedal Games, Hit + Auto; 3 engine moves, black screen, review blind; 4 no tool: upgrade + prove; 5 Nexon, Krafton, LiveOps, 11 to 19K a month; 6 Hit writes PR + fixes; 7 Auto plays old + new, verdict; 8 Auto never codes, Hit never judges; 9 black, 75, 25, 0.02, PASS; 10 two real PRs, both PASS, both merged; 11 twice, 0 pixels, lesson for next game; 12 free public, 79 to 499, live title 15K; 13 gstack review, gbrain memory; 14 reads code, plays game, keeps alive.
+Keyword card, by line: 1 Games rot; 2 Bran, Hit + Auto; 3 play video; 4 bump, black; 5 no tool; 6 Hit fixes, Auto plays; 7 replay, pixel diff, Ping verdict; 8 FAIL fix again, PASS merge; 9 black, 75, 25, 0.02, PASS; 10 2 of 2, merged today; 11 Nexon, Krafton, 11 to 19K a month; 12 0 px, 15 lessons, 9 faces; 13 free, 79, 15K per title; 14 reads code, plays game; 15 GitHub, auto-hit.
 
 ## Every number and its source
 
-- Line 3, the black screen: Quick_3D_RPG at three.js r118 → r162 with the version string alone (13 files) throws `Failed to resolve module specifier "three"` and draws no 3D frame in 4 of 4 checkpoints (wow-probe results.json, `runs["r162-bump"]`).
-- Line 5: the founder's statement of 2026-11-09, ₩15–25M a month, converted at the pegged ₩1,300 per dollar ($11.5K–$19.2K). It is said as his statement, never as a signed figure; the slide carries the note.
-- Line 9: the standalone replay probe, 1280x720 on SwiftShader. Fix 1 differs 68.20–75.59%, fix 2 7.58–24.87%, fix 3 0.0202–0.0393% on steps 1, 60, 120 and 180, against the 0.1% three.js e2e limit (results.json `diffs["r118-a vs r162-fix*-a"]`, rechecked by number-audit.json).
-- Line 10: [PR #3](https://github.com/DaedalGames/auto-hit/pull/3), Quick 3D RPG, PASS after 7 fixes at 0.01–0.04%, merged as ab90995, closing issue #2; [PR #5](https://github.com/DaedalGames/auto-hit/pull/5), Crossy Road r99 → r162, PASS after 4 fixes at 0.07–0.10%, closing issue #4. Both from the daedal-ping[bot] and COGGS Hit comments on the PRs. CI took 7 fixes where the standalone probe took 3, because CI fixes one measured cause per commit.
-- Line 11: two runs of the same r118 build differ by 0 pixels on all four checkpoints (`diffs["r118-a vs r118-b"]`). "Every fix becomes a lesson the next game reads first" means Hit queries `tools/brain.mjs` before each fix; it is not a claim that the brain cut the number of tries, since no run without it was measured.
-- Line 12: [docs/BM.md](../BM.md): Free $0, Hobby $79, Pro $249, Heavy $499 a month, Studio from $5,000 a month billed yearly, LiveOps $15,000 per live title a month.
-- Line 13: gstack's `/review` runs in `tools/review.mjs`; gbrain indexes `brain/lessons/` through `tools/brain.mjs` (.coggs/gstack/README.md). The full answer is FAQ 10.
+- Line 4, the black screen: Quick_3D_RPG at three.js r118 to r162 with the version string alone (13 files) throws `Failed to resolve module specifier "three"` and draws no 3D frame in 4 of 4 checkpoints (wow-probe results.json, `runs["r162-bump"]`).
+- Line 9 and the level meter: the standalone replay probe, 1280x720 on SwiftShader, steps 1, 60, 120 and 180, against the 0.1% three.js e2e limit. Fix 1 differs 68.20 to 75.59%, fix 2 7.58 to 24.87%, fix 3 0.0202 to 0.0393% (results.json `diffs["r118-a vs r162-fix*-a"]`, rechecked by number-audit.json). The meter is drawn on a log scale so the 0.1% line is visible. The moving GIF beside it is the FAIL to PASS segment of the probe's video.
+- Line 10: [PR #3](https://github.com/DaedalGames/auto-hit/pull/3), Quick 3D RPG, PASS after 7 fixes at 0.01 to 0.04%, merged as ab90995, closing issue #2; [PR #5](https://github.com/DaedalGames/auto-hit/pull/5), Crossy Road r99 to r162, PASS after 4 fixes at 0.07 to 0.10%, closing issue #4. CI took 7 fixes where the standalone probe took 3, because CI fixes one measured cause per commit.
+- Line 11: the founder's statement of 2026-11-09, ₩15 to 25M a month at the pegged ₩1,300 per dollar ($11.5K to $19.2K), from studios with over 10M players. Said as his statement.
+- Line 12: two replays of the same r118 build differ by 0 pixels on all four checkpoints (`diffs["r118-a vs r118-b"]`); 15 lesson files in `brain/lessons/` on main; 9 faces in `.coggs/ontology/faces.json` (color, lighting, loaders, input, audio, physics, save, network, runtime). "Grows with every game" means each solved cause is added as a lesson; it is not a claim that the brain cut the number of tries, since no run without it was measured.
+- Line 13: [docs/BM.md](../BM.md): Free $0, Hobby $79, Pro $249, Heavy $499 a month, Studio from $5,000 a month billed yearly, LiveOps $15,000 per live title a month.
+- How it was built (gstack and gbrain) is FAQ 10, no longer a pitch slide.
 
 ## FAQ answers to read aloud
 

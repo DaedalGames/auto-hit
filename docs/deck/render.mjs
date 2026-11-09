@@ -24,6 +24,21 @@ try {
     }).map((e) => s.id + ' ' + e.tagName + '.' + e.className + ' "' + (e.textContent || '').slice(0, 40) + '"');
   }));
   console.log('overflow', over.length ? over : 'none');
+  // Every box (border or background) must hold its own text; DECK_PLANT=1 plants a spilling chip to prove the check turns red.
+  if (process.env.DECK_PLANT) await page.evaluate(() => { const s = document.querySelector('.slide .pg'); const c = document.createElement('span'); c.style.cssText = 'display:inline-block;width:40px;border:1px solid red;white-space:nowrap'; c.textContent = 'spilling chip text'; s.appendChild(c); });
+  const spill = await page.evaluate(() => [...document.querySelectorAll('.slide *')].filter((e) => {
+    if (e.closest('.notes') || e.closest('svg') || !e.textContent.trim()) return false;
+    const cs = getComputedStyle(e);
+    const boxed = parseFloat(cs.borderTopWidth) + parseFloat(cs.borderLeftWidth) > 0 || cs.backgroundColor !== 'rgba(0, 0, 0, 0)';
+    if (!boxed || e.classList.contains('slide')) return false;
+    const b = e.getBoundingClientRect(); if (!b.width) return false;
+    return [...e.childNodes].filter((n) => n.nodeType === 3 && n.nodeValue.trim()).some((n) => {
+      const r = document.createRange(); r.selectNodeContents(n);
+      return [...r.getClientRects()].some((t) => t.width && (t.right > b.right + 1 || t.left < b.left - 1 || t.bottom > b.bottom + 1));
+    });
+  }).map((e) => e.closest('.slide').id + ' ' + e.tagName + '.' + e.className + ' "' + e.textContent.trim().slice(0, 30) + '"'));
+  console.log('box spill', spill.length ? spill : 'none');
+  if (spill.length || over.length) process.exitCode = 1;
   // Ask the renderer which font drew every text node (deckfont rule): any system font is a fallback.
   await page.evaluate(() => { for (const n of document.querySelectorAll('.notes,#hud')) n.remove(); });
   const cdp = await page.context().newCDPSession(page);
