@@ -238,14 +238,14 @@ export async function ontologyRoute(verdict, game, log, attempt) {
 }
 
 // One fix attempt: claude edits GAME_DIR and names cause, evidence and source; Hit checks the change and commits it.
-export async function fixAttempt({ wt, base, game, dep, from, to, verdictFile, verdict, brain, attempt, log }) {
+export async function fixAttempt({ wt, base, game, dep, from, to, verdictFile, verdict, brain, attempt, max = 6, log }) {
   const done = await fixSubjects(wt, base);
   const { dir, sources } = stageInputs({ wt, dep, from, to, verdictFile, brainFiles: brain?.files || [] });
   const ontology = await ontologyRoute(verdict, game, log, attempt);
   const prompt = [
     fs.readFileSync(path.join(dir, 'hit.md'), 'utf8'),
     '## This attempt',
-    'GAME_DIR=' + game, 'DEP=' + dep, 'FROM=' + from, 'TO=' + to, 'Fix attempt ' + attempt + '.',
+    'GAME_DIR=' + game, 'DEP=' + dep, 'FROM=' + from, 'TO=' + to, 'Fix attempt ' + attempt + ' of ' + max + ' (the cap for this run; this attempt is allowed).',
     'GUIDE: .hit.local/guide.md',
     'VERDICT: .hit.local/verdict/verdict.json (frames, when uploaded, under .hit.local/verdict/frames/)',
     sources.length ? 'SOURCES: ' + sources.join(' , ') : 'SOURCES: none installed; read https://cdn.jsdelivr.net/npm/' + dep + '@<version>/',
@@ -690,8 +690,8 @@ export async function main(a) {
       const brain = await brainQuery(symptomOf(v.verdict, game), dep, from, to, log, useBrain);
       rows.push({ attempt: fixes + 1, cause: 'writing fix ' + (fixes + 1) + '…' });
       await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: 'writing fix ' + (fixes + 1), note: 'Hit pushes one fix per failed verdict and stops after ' + max + ' fixes.' }));
-      let r = await fixAttempt({ wt, base, game, dep, from, to, verdictFile: v.file, verdict: v.verdict, brain, attempt: fixes + 1, log });
-      if (!r.ok) r = await fixAttempt({ wt, base, game, dep, from, to, verdictFile: v.file, verdict: v.verdict, brain, attempt: fixes + 1, log });
+      let r = await fixAttempt({ wt, base, game, dep, from, to, verdictFile: v.file, verdict: v.verdict, brain, attempt: fixes + 1, max, log });
+      if (!r.ok) r = await fixAttempt({ wt, base, game, dep, from, to, verdictFile: v.file, verdict: v.verdict, brain, attempt: fixes + 1, max, log });
       if (!r.ok) throw new Error('claude broke the commit rules twice on attempt ' + (fixes + 1) + ': ' + r.problems.join('; '));
       rows[rows.length - 1] = { attempt: fixes + 1, sha: r.sha, cause: r.subject.replace(/^fix\(hit\): /, '') };
       log({ kind: 'push', pr, attempt: fixes + 1, sha: await pushBranch(wt, prBranch) });
@@ -719,6 +719,7 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import
   }
   process.exitCode = await main(a);
 }
+
 
 
 
