@@ -64,6 +64,9 @@ const escape = (s) => s.replace(/[.*+?^\${}()|[\]\\]/g, '\\$&');
 export function bumpVersions(gameDir, dep, from, to) {
   const at = new RegExp('(\\b' + escape(dep) + '@)' + escape(minorOf(from)) + '(?:\\.\\d+)?(?![\\d.])', 'g');
   const pkg = new RegExp('("' + escape(dep) + '"\\s*:\\s*"[~^]?)' + escape(minorOf(from)) + '(?:\\.\\d+)?"', 'g');
+  // cdnjs names a release by its revision: ajax/libs/three.js/99/three.min.js.
+  const rev = (v) => String(v).split('.')[1];
+  const cdnjs = new RegExp('(/ajax/libs/' + escape(dep) + '(?:\\.js)?/r?)' + rev(from) + '(?=/)', 'g');
   const changed = [];
   const walk = (dir) => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -71,7 +74,7 @@ export function bumpVersions(gameDir, dep, from, to) {
       if (e.isDirectory()) { if (e.name !== 'node_modules' && e.name !== '.git') walk(file); continue; }
       if (!/\.(m?js|ts|html|json)$/i.test(e.name)) continue;
       const before = fs.readFileSync(file, 'utf8');
-      const after = before.replace(at, '$1' + to).replace(pkg, '$1' + to + '"');
+      const after = before.replace(at, '$1' + to).replace(pkg, '$1' + to + '"').replace(cdnjs, '$1' + rev(to));
       if (after !== before) { fs.writeFileSync(file, after); changed.push(path.relative(gameDir, file).split(path.sep).join('/')); }
     }
   };
@@ -330,12 +333,25 @@ async function fileIssue({ repo, game, dep, from, to, log }) {
   const found = open.find((i) => i.title === title);
   if (found) { log({ kind: 'issue', number: found.number, url: found.url, reused: true }); return found; }
   const hits = guideHits(guide, path.join(HIT_ROOT, game));
+  // Published advisories for the version the game loads, read from GitHub's advisory database.
+  const adv = await sh('gh', ['api', 'advisories?ecosystem=npm&affects=' + dep + '@' + from, '--jq', '[.[] | {ghsa_id, cve_id, severity, summary, html_url, patched: ([.vulnerabilities[] | select(.package.name == "' + dep + '") | .first_patched_version] | first)}]'], { allowFail: true });
+  const advisories = adv.code === 0 ? JSON.parse(adv.stdout || '[]') : [];
   const source = (/^Source: (.+)$/m.exec(guide) || [])[1] || '';
   const body = [
     '## What breaks',
     '',
     '\u0060' + game + '\u0060 loads ' + dep + '.js ' + rel(from) + ' (\u0060' + from + '\u0060). The current release is ' + rel(to) + ' (\u0060' + to + '\u0060), ' + releases + ' releases later. The game cannot take any fix or feature from those releases until it moves, and every release it waits adds more removed APIs to the jump.',
     '',
+    ...(advisories.length ? [
+      '## Security',
+      '',
+      dep + '.js ' + from + ' is affected by ' + advisories.length + ' published advisor' + (advisories.length === 1 ? 'y' : 'ies') + ':',
+      '',
+      '| advisory | severity | summary | fixed in |',
+      '| --- | --- | --- | --- |',
+      ...advisories.map((x) => '| [' + (x.cve_id || x.ghsa_id) + '](' + x.html_url + ') | ' + x.severity + ' | ' + x.summary + ' | ' + (x.patched || '?') + ' |'),
+      '',
+    ] : []),
     '## Evidence',
     '',
     hits.length + ' entries of the official migration guide between ' + rel(from) + ' and ' + rel(to) + ' change an API or path this game uses:',
@@ -356,7 +372,7 @@ async function fileIssue({ repo, game, dep, from, to, log }) {
   const r = await sh('gh', ['issue', 'create', '-R', repo, '--title', title, '--body-file', f, '--label', 'dependencies']);
   fs.rmSync(f);
   const url = r.stdout.trim().split('\n').pop();
-  const issue = { number: Number(url.split('/').pop()), title, url, releases, apis: hits.length };
+  const issue = { number: Number(url.split('/').pop()), title, url, releases, apis: hits.length, advisories: advisories.map((x) => x.cve_id || x.ghsa_id) };
   log({ kind: 'issue', ...issue });
   return issue;
 }
@@ -629,3 +645,4 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import
   }
   process.exitCode = await main(a);
 }
+
