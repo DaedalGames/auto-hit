@@ -63,7 +63,7 @@ node hit/run.mjs --game games/quick3drpg --dep three --from 0.118.1 --to 0.162.0
 
 1. It files an issue, labelled `dependencies`, saying how many releases the game is behind, with the migration guide entries that touch APIs the game uses.
 2. It opens the pull request that fixes the issue (`Fixes #n`); its first commit changes only the version strings.
-3. Each COGGS Auto FAIL on the head commit starts one `claude -p` call (10 minute limit) that follows [.coggs/hit.md](.coggs/hit.md), reads the verdict and the guide in [.coggs/guides/](.coggs/guides/), may edit only the game folder, and must leave exactly one `fix(hit): <cause>` commit with `Evidence:` and `Source:` lines. A call that breaks those rules is undone.
+3. Each COGGS Auto FAIL on the head commit starts one `claude -p` call (10 minute limit, file tools only) that follows [.coggs/hit.md](.coggs/hit.md), reads the verdict and the guide in [.coggs/guides/](.coggs/guides/), edits the game folder and names the cause, the evidence and the source. Hit commits that as one `fix(hit): <cause>` commit with `Evidence:` and `Source:` lines; a call that edits outside the game folder or names no cause is undone.
 4. One COGGS Hit status comment on the pull request is edited in place after every step.
 5. On PASS it squash-merges as `<title> (#n)`, which closes the issue, deletes the branch and reads the link back. After three fixes without PASS it labels the pull request `needs-human` instead.
 

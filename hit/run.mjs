@@ -169,7 +169,7 @@ async function brainQuery(symptom, dep, from, to, log, enabled = true) {
   const hits = JSON.parse(r.stdout);
   log({ kind: 'brain', query: q, hits: hits.map((h) => h.slug) });
   if (!hits.length) return null;
-  return hits.map((h) => '- ' + h.title + '\n  fix: ' + h.fix + '\n  lesson: ' + path.join(HIT_ROOT, h.file)).join('\n');
+  return { text: hits.map((h) => '- ' + h.title + '\n  fix: ' + h.fix + '\n  lesson: .hit.local/lessons/' + path.basename(h.file)).join('\n'), files: hits.map((h) => path.join(HIT_ROOT, h.file)) };
 }
 
 async function brainAdd(file, log) {
@@ -181,76 +181,86 @@ async function brainAdd(file, log) {
 
 const gamePrefix = (game) => { const g = game.replace(/\\/g, '/').replace(/^\.\/?/, '').replace(/\/$/, ''); return g ? g + '/' : ''; };
 
-const fixSubjects = async (wt, base) => (await git(wt, 'log', '--format=%s', base + '..HEAD')).split('\n').filter((s) => s.startsWith('fix(hit):'));
+const fixSubjects = async (wt, base) => (await git(wt, 'log', '--format=%s', base + '..HEAD')).split('\n').filter((l) => l.startsWith('fix(hit):'));
 
-function claudeArgs(gameDir, addDirs) {
-  const g = './' + gameDir.replace(/\\/g, '/').replace(/^\.\//, '').replace(/\/$/, '');
-  const allowed = [
-    'Read', 'Grep', 'Glob', 'LS',
-    'Edit(' + g + '/**)', 'Write(' + g + '/**)', 'MultiEdit(' + g + '/**)',
-    'WebFetch(domain:cdn.jsdelivr.net)', 'WebFetch(domain:raw.githubusercontent.com)',
-  ];
-  // Claude Code on Windows reaches git through either its Bash or its PowerShell tool.
-  for (const shell of ['Bash', 'PowerShell']) for (const g of ['add', 'commit', 'status', 'diff', 'log', 'show']) allowed.push(shell + '(git ' + g + ':*)');
-  return ['-p', '--safe-mode', '--no-session-persistence', '--output-format', 'json', '--permission-mode', 'dontAsk',
-    '--settings', JSON.stringify({ includeCoAuthoredBy: false, attribution: { commit: '', pr: '' } }),
-    '--allowedTools', allowed.join(','), ...addDirs.flatMap((d) => ['--add-dir', d])];
+// Claude edits files and nothing else: no shell, no git, writes refused under .hit.local/ (its inputs) and .git/.
+// It works with the worktree as its only directory, so every write it makes shows in git status.
+function claudeArgs() {
+  const deny = ['Bash', 'PowerShell', 'Edit(./.hit.local/**)', 'Write(./.hit.local/**)', 'Edit(./.git/**)', 'Write(./.git/**)'];
+  return ['-p', '--safe-mode', '--no-session-persistence', '--output-format', 'json', '--permission-mode', 'acceptEdits',
+    '--settings', JSON.stringify({ includeCoAuthoredBy: false }),
+    '--allowedTools', 'Read,Grep,Glob,LS,Edit,Write,WebFetch(domain:cdn.jsdelivr.net),WebFetch(domain:raw.githubusercontent.com)',
+    '--disallowedTools', deny.join(',')];
 }
 
-// One fix attempt: claude -p edits GAME_DIR and makes exactly one commit, or the attempt is undone.
+// Copies what one attempt reads into <worktree>/.hit.local/ (ignored by *.local*); the two package versions are junctions.
+function stageInputs({ wt, dep, from, to, verdictFile, brainFiles }) {
+  const dir = path.join(wt, '.hit.local');
+  fs.rmSync(dir, { recursive: true, force: true });
+  fs.mkdirSync(path.join(dir, 'lessons'), { recursive: true });
+  fs.copyFileSync(path.join(HIT_ROOT, '.coggs', 'hit.md'), path.join(dir, 'hit.md'));
+  fs.copyFileSync(path.join(HIT_ROOT, '.coggs', 'guides', guideName(dep, from, to)), path.join(dir, 'guide.md'));
+  fs.cpSync(path.dirname(verdictFile), path.join(dir, 'verdict'), { recursive: true });
+  for (const f of brainFiles) fs.copyFileSync(f, path.join(dir, 'lessons', path.basename(f)));
+  const sources = [];
+  for (const v of [from, to]) {
+    const src = path.join(HIT_ROOT, 'node_modules', dep + '-' + v);
+    if (!fs.existsSync(src)) continue;
+    fs.symlinkSync(src, path.join(dir, dep + '-' + v), 'junction');
+    sources.push('.hit.local/' + dep + '-' + v);
+  }
+  return { dir, sources };
+}
+
+// One fix attempt: claude edits GAME_DIR and names cause, evidence and source; Hit checks the change and commits it.
 export async function fixAttempt({ wt, base, game, dep, from, to, verdictFile, verdict, brain, attempt, log }) {
-  const guide = path.join(HIT_ROOT, '.coggs', 'guides', guideName(dep, from, to));
-  const sources = [from, to].map((v) => path.join(HIT_ROOT, 'node_modules', dep + '-' + v)).filter((p) => fs.existsSync(p));
-  const before = await git(wt, 'rev-parse', 'HEAD');
   const done = await fixSubjects(wt, base);
+  const { dir, sources } = stageInputs({ wt, dep, from, to, verdictFile, brainFiles: brain?.files || [] });
   const prompt = [
-    fs.readFileSync(path.join(HIT_ROOT, '.coggs', 'hit.md'), 'utf8'),
+    fs.readFileSync(path.join(dir, 'hit.md'), 'utf8'),
     '## This attempt',
     'GAME_DIR=' + game, 'DEP=' + dep, 'FROM=' + from, 'TO=' + to, 'Fix attempt ' + attempt + '.',
-    'GUIDE: ' + guide,
-    'VERDICT: ' + verdictFile + ' (base, head and diff frames under frames/ beside it, when the run uploaded them)',
-    sources.length ? 'SOURCES: ' + sources.join(' , ') : 'SOURCES: none installed; fetch from cdn.jsdelivr.net',
+    'GUIDE: .hit.local/guide.md',
+    'VERDICT: .hit.local/verdict/verdict.json (frames, when uploaded, under .hit.local/verdict/frames/)',
+    sources.length ? 'SOURCES: ' + sources.join(' , ') : 'SOURCES: none installed; read https://cdn.jsdelivr.net/npm/' + dep + '@<version>/',
     'Fixes so far: ' + (done.length ? done.join(' ; ') : 'none'),
-    brain ? '## Known causes from earlier games\n' + brain : '',
+    brain ? '## Known causes from earlier games\n' + brain.text : '',
   ].filter(Boolean).join('\n');
-  const addDirs = [path.dirname(guide), path.dirname(verdictFile), path.join(HIT_ROOT, 'brain', 'lessons'), ...sources].filter((p) => fs.existsSync(p));
   const t0 = Date.now();
-  const r = await sh('claude', claudeArgs(game, addDirs), { cwd: wt, input: prompt, timeoutMs: CLAUDE_TIMEOUT_MS, allowFail: true });
+  const r = await sh('claude', claudeArgs(), { cwd: wt, input: prompt, timeoutMs: CLAUDE_TIMEOUT_MS, allowFail: true });
+  fs.rmSync(dir, { recursive: true, force: true });
   let out = {};
   try { out = JSON.parse(r.stdout); } catch { out = { result: r.stdout }; }
-  const cause = (/CAUSE:\s*(.+)/.exec(out.result || '') || [])[1]?.trim() || null;
+  const line = (k) => ((new RegExp('^' + k + ':\\s*(.+)$', 'mi').exec(out.result || '') || [])[1] || '').trim();
+  const cause = line('CAUSE'), evidence = line('EVIDENCE'), source = line('SOURCE');
   const denied = (out.permission_denials || []).map((d) => d.tool_name + ' ' + JSON.stringify(d.tool_input).slice(0, 160));
   const meta = { attempt, seconds: Math.round((Date.now() - t0) / 1000), costUsd: out.total_cost_usd ?? null, turns: out.num_turns ?? null, timedOut: r.timedOut, exit: r.code, denied };
 
-  const commits = (await git(wt, 'rev-list', before + '..HEAD')).split('\n').filter(Boolean);
-  const dirty = await git(wt, 'status', '--porcelain');
+  const changed = (await git(wt, 'status', '--porcelain', '--untracked-files=all')).split('\n').filter(Boolean).map((l) => l.slice(3).replace(/^"|"$/g, ''));
+  const prefix = gamePrefix(game);
   const problems = [];
-  if (r.code !== 0 || r.timedOut || out.is_error) problems.push('claude failed: ' + (r.timedOut ? 'timeout' : (out.result || r.stderr).slice(0, 300)));
-  if (commits.length !== 1) problems.push('expected exactly one commit, found ' + commits.length);
-  let sha = null, subject = null;
-  if (commits.length === 1) {
-    sha = commits[0];
-    const msg = await git(wt, 'log', '-1', '--format=%B', sha);
-    subject = msg.split('\n')[0];
-    if (!/^fix\(hit\): \S/.test(subject)) problems.push('subject is not "fix(hit): <cause>": ' + subject);
-    if (!/^Evidence: \S/m.test(msg)) problems.push('body has no Evidence: line');
-    if (!/^Source: \S/m.test(msg)) problems.push('body has no Source: line');
-    if (/^Co-Authored-By:/im.test(msg)) problems.push('body carries a Co-Authored-By trailer');
-    const files = (await git(wt, 'diff', '--name-only', before, sha)).split('\n').filter(Boolean);
-    const prefix = gamePrefix(game);
-    const outside = files.filter((f) => !f.startsWith(prefix) || FORBIDDEN.some((p) => f.startsWith(p)));
-    if (outside.length) problems.push('edited outside GAME_DIR: ' + outside.join(', '));
-    if (!files.length) problems.push('commit changes no file');
-  }
-  if (dirty) problems.push('left uncommitted changes: ' + dirty.split('\n').length + ' paths');
+  if (r.code !== 0 || r.timedOut || out.is_error) problems.push('claude failed: ' + (r.timedOut ? 'timeout' : String(out.result || r.stderr).slice(0, 300)));
+  if (!changed.length) problems.push('no file changed');
+  const outside = changed.filter((f) => !f.startsWith(prefix) || FORBIDDEN.some((p) => f.startsWith(p)));
+  if (outside.length) problems.push('edited outside GAME_DIR: ' + outside.join(', '));
+  if (!cause) problems.push('no CAUSE: line');
+  if (!evidence) problems.push('no EVIDENCE: line');
+  if (!source) problems.push('no SOURCE: line');
   if (problems.length) {
-    await git(wt, 'reset', '--hard', before);
+    await git(wt, 'checkout', '--', '.');
     await git(wt, 'clean', '-fd', '--', game);
     log({ kind: 'violation', ...meta, cause, problems });
     return { ok: false, problems, cause };
   }
-  log({ kind: 'fix', ...meta, cause: cause || subject.replace(/^fix\(hit\): /, ''), sha, verdictBefore: summarizeVerdict(verdict, game) });
-  return { ok: true, sha, subject, cause };
+  const subject = 'fix(hit): ' + cause.replace(/^fix\(hit\):\s*/i, '').replace(/\.$/, '');
+  const msgFile = path.join(path.dirname(wt), path.basename(wt) + '-msg.local.txt');
+  fs.writeFileSync(msgFile, subject + '\n\nEvidence: ' + evidence + '\nSource: ' + source.replace(/^Source:\s*/i, '') + '\n');
+  await git(wt, 'add', '--', ...changed);
+  await git(wt, 'commit', '-q', '-F', msgFile);
+  fs.rmSync(msgFile);
+  const sha = await git(wt, 'rev-parse', 'HEAD');
+  log({ kind: 'fix', ...meta, cause: subject.slice(10), sha, files: changed, verdictBefore: summarizeVerdict(verdict, game) });
+  return { ok: true, sha, subject, cause: subject.slice(10) };
 }
 
 async function pushBranch(wt, branch) {
@@ -517,7 +527,7 @@ async function mergeAndClose({ repo, pr, issue, title, wt, base, branch, log }) 
 
 async function ensureBrain(log) {
   const tool = path.join(HIT_ROOT, 'tools', 'brain.mjs');
-  if (!fs.existsSync(tool) || fs.existsSync(path.join(HIT_ROOT, 'brain', '.gbrain'))) return;
+  if (!fs.existsSync(tool) || fs.existsSync(path.join(HIT_ROOT, 'brain', '.gbrain', 'brain.pglite'))) return;
   const r = await sh(process.execPath, [tool, 'init'], { allowFail: true, timeoutMs: 300000 });
   log({ kind: 'brain', init: r.code === 0 ? r.stdout : 'failed: ' + r.stderr.split('\n').pop() });
 }
@@ -660,5 +670,6 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import
   }
   process.exitCode = await main(a);
 }
+
 
 
