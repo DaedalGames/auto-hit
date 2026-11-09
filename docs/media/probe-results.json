@@ -1,0 +1,1642 @@
+{
+  "subject": "simondevyoutube/Quick_3D_RPG @ bfeef5cc (codeload zip), three r118 (0.118.1) -> r162 (0.162.0) from jsDelivr",
+  "rule": "three.js test/e2e: pixel differs when normalized squared RGB distance > 0.1^2; pair fails when > 0.1% pixels differ (1280x720 canvas = 921.6 px)",
+  "harness": "run.mjs: chrome-headless-shell 1248 via playwright-core 1.65.0, 1280x720 DPR1; seeded Math.random (mulberry32), frozen performance.now/Date.now advanced 1000/60 ms per harness step, requestAnimationFrame queued and drained by the harness; jsDelivr responses cached to disk; frames read with canvas.toDataURL at steps 1,60,120,180; W held from step 61 to 150",
+  "builds": {
+    "b118": "unmodified",
+    "b162-bump": "version string only (13 files)",
+    "b162-map": "version string + import map",
+    "b162-fix1": "rename-only: + SRGBColorSpace/outputColorSpace/colorSpace, SphereGeometry, import map",
+    "b162-fix1g": "fix1 + health-bar ShaderMaterial #version 300 es moved to glslVersion: THREE.GLSL3",
+    "b162-fix2": "fix1g + THREE.ColorManagement.enabled=false + renderer.useLegacyLights=true",
+    "b162-fix3": "fix2 + FBXLoader.parse wrapper converting FBX material/vertex colors linear->sRGB back (r162 FBXLoader calls convertSRGBToLinear, r118 did not)"
+  },
+  "runs": {
+    "r118-a": {
+      "build": "b118",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 11.33,
+      "stepSeconds": 12.739,
+      "totalSeconds": 24.24,
+      "requests": 95,
+      "rngCalls": {
+        "game": 630,
+        "lib": 10756
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0ae380acf1fb0dfb0f440b8b33ff4fedcfce3971a410548e10b4114d816b4908",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-a\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "b3a0247933d6c99da3b697bfe6a442788ad192678179284839d3152e26615157",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-a\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d6709ed54d3b486d32b74c0a4213f8581abd57ce545aa83a02ebd76eb0c7639d",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-a\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d05ca31f0c995b34564d588ba6d148f4ef40dccf3625bcb5a571fa99f3daf7fb",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-a\\f180.jpg"
+        }
+      }
+    },
+    "r118-b": {
+      "build": "b118",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 8.953,
+      "stepSeconds": 12.844,
+      "totalSeconds": 22.021,
+      "requests": 95,
+      "rngCalls": {
+        "game": 630,
+        "lib": 10756
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0ae380acf1fb0dfb0f440b8b33ff4fedcfce3971a410548e10b4114d816b4908",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-b\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "b3a0247933d6c99da3b697bfe6a442788ad192678179284839d3152e26615157",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-b\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d6709ed54d3b486d32b74c0a4213f8581abd57ce545aa83a02ebd76eb0c7639d",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-b\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d05ca31f0c995b34564d588ba6d148f4ef40dccf3625bcb5a571fa99f3daf7fb",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-b\\f180.jpg"
+        }
+      }
+    },
+    "r118-gpu-a": {
+      "build": "b118",
+      "rng": "split",
+      "gpu": "gpu",
+      "wait": "quiet",
+      "loadSeconds": 6.004,
+      "stepSeconds": 2.208,
+      "totalSeconds": 8.372,
+      "requests": 95,
+      "inflightAtFirstStep": 0,
+      "rngCalls": {
+        "game": 630,
+        "lib": 10756
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "6f31439c39788aa6c073c557bb7dd740b23507d1b9a633bbf0caafdfe3ad103f",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-gpu-a\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "7a0e8889315fd5ac5afcdf05e8d749bd617e875a0f0056be6ba4642f671c5fec",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-gpu-a\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "01ddec2c68179393ad476ab22d94fcdc39b19708d9bf8117c5dd334715e9bf70",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-gpu-a\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "4900127af47dbb95ea1148a3af4b7fac42d363eb14a480ae130a5cac1d9d6d62",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-gpu-a\\f180.jpg"
+        }
+      }
+    },
+    "r118-gpu-b": {
+      "build": "b118",
+      "rng": "split",
+      "gpu": "gpu",
+      "wait": "quiet",
+      "loadSeconds": 5.594,
+      "stepSeconds": 1.85,
+      "totalSeconds": 7.613,
+      "requests": 95,
+      "inflightAtFirstStep": 0,
+      "rngCalls": {
+        "game": 630,
+        "lib": 10756
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "6f31439c39788aa6c073c557bb7dd740b23507d1b9a633bbf0caafdfe3ad103f",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-gpu-b\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "7a0e8889315fd5ac5afcdf05e8d749bd617e875a0f0056be6ba4642f671c5fec",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-gpu-b\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "01ddec2c68179393ad476ab22d94fcdc39b19708d9bf8117c5dd334715e9bf70",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-gpu-b\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "4900127af47dbb95ea1148a3af4b7fac42d363eb14a480ae130a5cac1d9d6d62",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-gpu-b\\f180.jpg"
+        }
+      }
+    },
+    "r118-naive-a": {
+      "build": "b118",
+      "rng": "naive",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 8.525,
+      "stepSeconds": 12.758,
+      "totalSeconds": 21.625,
+      "requests": 96,
+      "inflightAtFirstStep": 0,
+      "rngCalls": {
+        "game": 11670,
+        "lib": 0
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "b79dbeb90f7ac261bd4004aecdb37d89f53da456075c5c3472ec4ff95a856a82",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-naive-a\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "eeda61c37c93f980e3b8b58bc0f08124e470bc0ad5be090700305ad7eef54211",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-naive-a\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "daeb116eb733f40b7e8c102cccb6d5f394d0f2934726de82571241860262b989",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-naive-a\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0d03ec66eefed4fc8bd3a52007b49672e0a09c39dd9c0728b7b712edec8d0536",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-naive-a\\f180.jpg"
+        }
+      }
+    },
+    "r118-naive-b": {
+      "build": "b118",
+      "rng": "naive",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 6.568,
+      "stepSeconds": 12.722,
+      "totalSeconds": 19.498,
+      "requests": 96,
+      "inflightAtFirstStep": 0,
+      "rngCalls": {
+        "game": 11670,
+        "lib": 0
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "b79dbeb90f7ac261bd4004aecdb37d89f53da456075c5c3472ec4ff95a856a82",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-naive-b\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "eeda61c37c93f980e3b8b58bc0f08124e470bc0ad5be090700305ad7eef54211",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-naive-b\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "daeb116eb733f40b7e8c102cccb6d5f394d0f2934726de82571241860262b989",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-naive-b\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0d03ec66eefed4fc8bd3a52007b49672e0a09c39dd9c0728b7b712edec8d0536",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-naive-b\\f180.jpg"
+        }
+      }
+    },
+    "r118-nowait-a": {
+      "build": "b118",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "nowait",
+      "loadSeconds": 2.678,
+      "stepSeconds": 12.959,
+      "totalSeconds": 15.814,
+      "requests": 89,
+      "inflightAtFirstStep": 2,
+      "rngCalls": {
+        "game": 630,
+        "lib": 10756
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "01b82b50089a5f5c551871fcdca52b6e37af6ff4634ac28cc759f9ccad064cc7",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-nowait-a\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "5bc69076b57f97ecad7768fff76a5dffc5bba5fcca3e3551ee316da9b81e47f7",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-nowait-a\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d6709ed54d3b486d32b74c0a4213f8581abd57ce545aa83a02ebd76eb0c7639d",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-nowait-a\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d05ca31f0c995b34564d588ba6d148f4ef40dccf3625bcb5a571fa99f3daf7fb",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-nowait-a\\f180.jpg"
+        }
+      }
+    },
+    "r118-nowait-b": {
+      "build": "b118",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "nowait",
+      "loadSeconds": 3.262,
+      "stepSeconds": 12.163,
+      "totalSeconds": 15.758,
+      "requests": 90,
+      "inflightAtFirstStep": 1,
+      "rngCalls": {
+        "game": 630,
+        "lib": 10756
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0ae380acf1fb0dfb0f440b8b33ff4fedcfce3971a410548e10b4114d816b4908",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-nowait-b\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "b3a0247933d6c99da3b697bfe6a442788ad192678179284839d3152e26615157",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-nowait-b\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d6709ed54d3b486d32b74c0a4213f8581abd57ce545aa83a02ebd76eb0c7639d",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-nowait-b\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d05ca31f0c995b34564d588ba6d148f4ef40dccf3625bcb5a571fa99f3daf7fb",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r118-nowait-b\\f180.jpg"
+        }
+      }
+    },
+    "r162-bump": {
+      "build": "b162-bump",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 3.611,
+      "stepSeconds": 0.432,
+      "totalSeconds": 4.324,
+      "requests": 34,
+      "rngCalls": {
+        "game": 0,
+        "lib": 0
+      },
+      "pageErrors": [
+        "Failed to resolve module specifier \"three\". Relative references must start with either \"/\", \"./\", or \"../\"."
+      ],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [],
+      "frames": {
+        "f001": {
+          "canvas": false,
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-bump\\f001.page.png"
+        },
+        "f060": {
+          "canvas": false,
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-bump\\f060.page.png"
+        },
+        "f120": {
+          "canvas": false,
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-bump\\f120.page.png"
+        },
+        "f180": {
+          "canvas": false,
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-bump\\f180.page.png"
+        }
+      }
+    },
+    "r162-fix1-a": {
+      "build": "b162-fix1",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 6.081,
+      "stepSeconds": 12.958,
+      "totalSeconds": 19.22,
+      "requests": 95,
+      "rngCalls": {
+        "game": 630,
+        "lib": 11324
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights.",
+        "error: THREE.WebGLProgram: Shader Error 0 - VALIDATE_STATUS false | ERROR: 0:89: 'version' : #version directive must occur before anything else, except for comments and white space",
+        "warning: WebGL: INVALID_OPERATION: useProgram: program not valid"
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "dfff59c873f40aec45a01d5a54327c9248c0e3e39c038692ac1d2f0c192777a9",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix1-a\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "301b5a45ffdafcc9824e53af264f9de18e81a5f9fe959a73545be2aeac57c3d1",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix1-a\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "947642c073984c795622898bcc28e6df260e5749e183c7d9b1eefcb406a171f9",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix1-a\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "3f4eb0b66c40bdbad06d52794c790d41b2a587d2b66ea375cee11df5f07335e6",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix1-a\\f180.jpg"
+        }
+      }
+    },
+    "r162-fix1g-a": {
+      "build": "b162-fix1g",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 8.453,
+      "stepSeconds": 12.632,
+      "totalSeconds": 21.285,
+      "requests": 95,
+      "rngCalls": {
+        "game": 630,
+        "lib": 11324
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "06fa0f1e18b026096297efb05dd2496e3586c350e567055dc386f60d86a00503",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix1g-a\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "90f48f1d61cd52b7058d0fb18b27f048bd8a2dd46d4a8925ee94c00b0899b223",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix1g-a\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "b4e2811d4bc3d86e4d524f4fcb3512d76d41f77e8d86df65b5fcd9369e766c0d",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix1g-a\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "81451f0b8e25c932564512123e42906c0e21f2d1f0754022b5d84eb808d36947",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix1g-a\\f180.jpg"
+        }
+      }
+    },
+    "r162-fix2-a": {
+      "build": "b162-fix2",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 5.971,
+      "stepSeconds": 12.008,
+      "totalSeconds": 18.248,
+      "requests": 95,
+      "rngCalls": {
+        "game": 630,
+        "lib": 11324
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.WebGLRenderer: The property .useLegacyLights has been deprecated. Migrate your lighting according to the following guide: https://discourse.threejs.org/t/updates-to-lighting-in-three-js-r155/53733.",
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "063053798e17bdfe5b7455e748e2abf453d56cabeb540aed2b28bed0bdf3d7ff",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix2-a\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "52788cdfe2101058b2c2089938be134c80ae6a32bf559c18a8632ce93ced6bd4",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix2-a\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "28a3e432c350e1c51ef90e766b9d1296811085fa212089d2af68746da27aaf5b",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix2-a\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "1572fd4bc5b8f26f6679bb97b7d4d4f26a707f8efc9f533d7b32877f46965d58",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix2-a\\f180.jpg"
+        }
+      }
+    },
+    "r162-fix2-b": {
+      "build": "b162-fix2",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 5.916,
+      "stepSeconds": 12.467,
+      "totalSeconds": 18.622,
+      "requests": 95,
+      "rngCalls": {
+        "game": 630,
+        "lib": 11324
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.WebGLRenderer: The property .useLegacyLights has been deprecated. Migrate your lighting according to the following guide: https://discourse.threejs.org/t/updates-to-lighting-in-three-js-r155/53733.",
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "063053798e17bdfe5b7455e748e2abf453d56cabeb540aed2b28bed0bdf3d7ff",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix2-b\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "52788cdfe2101058b2c2089938be134c80ae6a32bf559c18a8632ce93ced6bd4",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix2-b\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "28a3e432c350e1c51ef90e766b9d1296811085fa212089d2af68746da27aaf5b",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix2-b\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "1572fd4bc5b8f26f6679bb97b7d4d4f26a707f8efc9f533d7b32877f46965d58",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix2-b\\f180.jpg"
+        }
+      }
+    },
+    "r162-fix3-a": {
+      "build": "b162-fix3",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 8.07,
+      "stepSeconds": 11.854,
+      "totalSeconds": 20.124,
+      "requests": 95,
+      "rngCalls": {
+        "game": 630,
+        "lib": 11324
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.WebGLRenderer: The property .useLegacyLights has been deprecated. Migrate your lighting according to the following guide: https://discourse.threejs.org/t/updates-to-lighting-in-three-js-r155/53733.",
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "04a25da548e850e232c1181d79173016e00d062003e3a31b597b690e3e35da7e",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-a\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "8fc2e4236461ac7db4347fefffba76a6613fe8eebb808db772ee60e77ae019d2",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-a\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "3f6448ad7c433a7c144b99a67a44a818e85e38a5d67003a7cce506ad44004754",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-a\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "69ae70a0b9d3b9666d0ef0d4bae1ecebd364807e3134d09848f7a6b5b5f44b38",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-a\\f180.jpg"
+        }
+      }
+    },
+    "r162-fix3-b": {
+      "build": "b162-fix3",
+      "rng": "split",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 5.514,
+      "stepSeconds": 12.035,
+      "totalSeconds": 17.733,
+      "requests": 95,
+      "rngCalls": {
+        "game": 630,
+        "lib": 11324
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.WebGLRenderer: The property .useLegacyLights has been deprecated. Migrate your lighting according to the following guide: https://discourse.threejs.org/t/updates-to-lighting-in-three-js-r155/53733.",
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "04a25da548e850e232c1181d79173016e00d062003e3a31b597b690e3e35da7e",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-b\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "8fc2e4236461ac7db4347fefffba76a6613fe8eebb808db772ee60e77ae019d2",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-b\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "3f6448ad7c433a7c144b99a67a44a818e85e38a5d67003a7cce506ad44004754",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-b\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "69ae70a0b9d3b9666d0ef0d4bae1ecebd364807e3134d09848f7a6b5b5f44b38",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-b\\f180.jpg"
+        }
+      }
+    },
+    "r162-fix3-gpu": {
+      "build": "b162-fix3",
+      "rng": "split",
+      "gpu": "gpu",
+      "wait": "quiet",
+      "loadSeconds": 5.403,
+      "stepSeconds": 1.977,
+      "totalSeconds": 7.525,
+      "requests": 95,
+      "inflightAtFirstStep": 0,
+      "rngCalls": {
+        "game": 630,
+        "lib": 11324
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.WebGLRenderer: The property .useLegacyLights has been deprecated. Migrate your lighting according to the following guide: https://discourse.threejs.org/t/updates-to-lighting-in-three-js-r155/53733.",
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "d413c8dfe4d9cacc26b53126d1a3004a175b38d83ccf0705e926e06e81989c66",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-gpu\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "892bee9c9c7792673551f9af1715b291ce5617af9276b0702ce91bbffe368638",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-gpu\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "b60824f2507e8beefb27028763f932f146e6c2890dbdf4d5539c70b402f15de3",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-gpu\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "f63dfb0d0bf9f03bbb5982c46eec31d04ef42ea9e68baac71f514be85185d988",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-gpu\\f180.jpg"
+        }
+      }
+    },
+    "r162-fix3-naive": {
+      "build": "b162-fix3",
+      "rng": "naive",
+      "gpu": "swiftshader",
+      "wait": "quiet",
+      "loadSeconds": 5.838,
+      "stepSeconds": 12.873,
+      "totalSeconds": 18.922,
+      "requests": 94,
+      "inflightAtFirstStep": 0,
+      "rngCalls": {
+        "game": 12026,
+        "lib": 0
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.WebGLRenderer: The property .useLegacyLights has been deprecated. Migrate your lighting according to the following guide: https://discourse.threejs.org/t/updates-to-lighting-in-three-js-r155/53733.",
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0a97d1f82802053245969d7a3a151d1cef54add471249667088262ce879993a3",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-naive\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "21ee4b6a2964ec1d0dce315cbf9b56c36ca6b239e0b4e4cc6ea1c5fd49b9fef6",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-naive\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "5b5f9dcd41dbfbce8b86002e7d6f3498774093bb92bd2542d192f810e7c1d13d",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-naive\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "e067c159f688f3eaeb136b76b6bee20522737178d96f0fa4caf7f076a35ac31a",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-fix3-naive\\f180.jpg"
+        }
+      }
+    },
+    "r162-map": {
+      "build": "b162-map",
+      "rng": "split",
+      "gpu": "gpu",
+      "wait": "quiet",
+      "loadSeconds": 5.592,
+      "stepSeconds": 0.657,
+      "totalSeconds": 6.422,
+      "requests": 95,
+      "inflightAtFirstStep": 0,
+      "rngCalls": {
+        "game": 630,
+        "lib": 11056
+      },
+      "pageErrors": [
+        "THREE.SphereBufferGeometry is not a constructor"
+      ],
+      "failedRequests": [],
+      "consoleErrorsAndWarnings": [
+        "warning: THREE.FBXLoader: Vertex has more than 4 skinning weights assigned to vertex. Deleting additional weights."
+      ],
+      "frames": {
+        "f001": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0c660f2bd3eff3150dd0040789abe2291613b9af319df870203d4f77a4913a5f",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-map\\f001.jpg"
+        },
+        "f060": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0c660f2bd3eff3150dd0040789abe2291613b9af319df870203d4f77a4913a5f",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-map\\f060.jpg"
+        },
+        "f120": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0c660f2bd3eff3150dd0040789abe2291613b9af319df870203d4f77a4913a5f",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-map\\f120.jpg"
+        },
+        "f180": {
+          "canvas": true,
+          "width": 1280,
+          "height": 720,
+          "sha256": "0c660f2bd3eff3150dd0040789abe2291613b9af319df870203d4f77a4913a5f",
+          "jpg": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\runs\\r162-map\\f180.jpg"
+        }
+      }
+    }
+  },
+  "diffs": {
+    "r118-a vs r118-b": {
+      "allPass": true,
+      "frames": {
+        "f001": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            152.56,
+            152.56
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-b\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171.32,
+            171.32
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-b\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            172.11,
+            172.11
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-b\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171.48,
+            171.48
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-b\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-a vs r118-gpu-a": {
+      "allPass": true,
+      "frames": {
+        "f001": {
+          "differentPct": 0.0315,
+          "differentPixels": 290,
+          "anyChangedPixels": 56415,
+          "meanLuma": [
+            152.56,
+            152.52
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-gpu-a\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0.0283,
+          "differentPixels": 261,
+          "anyChangedPixels": 51119,
+          "meanLuma": [
+            171.32,
+            171.29
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-gpu-a\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0.0302,
+          "differentPixels": 278,
+          "anyChangedPixels": 46259,
+          "meanLuma": [
+            172.11,
+            172.08
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-gpu-a\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0.027,
+          "differentPixels": 249,
+          "anyChangedPixels": 56420,
+          "meanLuma": [
+            171.48,
+            171.45
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-gpu-a\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-a vs r118-naive-a": {
+      "allPass": false,
+      "frames": {
+        "f001": {
+          "differentPct": 41.8372,
+          "differentPixels": 385572,
+          "anyChangedPixels": 443448,
+          "meanLuma": [
+            152.56,
+            152.64
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-naive-a\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 20.9477,
+          "differentPixels": 193054,
+          "anyChangedPixels": 203837,
+          "meanLuma": [
+            171.32,
+            169.55
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-naive-a\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 20.2248,
+          "differentPixels": 186392,
+          "anyChangedPixels": 196424,
+          "meanLuma": [
+            172.11,
+            171
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-naive-a\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 20.3097,
+          "differentPixels": 187174,
+          "anyChangedPixels": 197001,
+          "meanLuma": [
+            171.48,
+            170.67
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-naive-a\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-a vs r118-nowait-a": {
+      "allPass": false,
+      "frames": {
+        "f001": {
+          "differentPct": 1.977,
+          "differentPixels": 18220,
+          "anyChangedPixels": 19100,
+          "meanLuma": [
+            152.56,
+            153
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-nowait-a\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0.0035,
+          "differentPixels": 32,
+          "anyChangedPixels": 11432,
+          "meanLuma": [
+            171.32,
+            171.32
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-nowait-a\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            172.11,
+            172.11
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-nowait-a\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171.48,
+            171.48
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r118-nowait-a\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-a vs r162-fix1-a": {
+      "allPass": false,
+      "frames": {
+        "f001": {
+          "differentPct": 75.6337,
+          "differentPixels": 697040,
+          "anyChangedPixels": 722157,
+          "meanLuma": [
+            152.56,
+            87.54
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix1-a\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 68.2133,
+          "differentPixels": 628654,
+          "anyChangedPixels": 659149,
+          "meanLuma": [
+            171.32,
+            102.55
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix1-a\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 68.4774,
+          "differentPixels": 631088,
+          "anyChangedPixels": 659218,
+          "meanLuma": [
+            172.11,
+            102.78
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix1-a\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 68.5768,
+          "differentPixels": 632004,
+          "anyChangedPixels": 660349,
+          "meanLuma": [
+            171.48,
+            102.39
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix1-a\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-a vs r162-fix1g-a": {
+      "allPass": false,
+      "frames": {
+        "f001": {
+          "differentPct": 75.5872,
+          "differentPixels": 696612,
+          "anyChangedPixels": 721827,
+          "meanLuma": [
+            152.56,
+            87.61
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix1g-a\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 68.1955,
+          "differentPixels": 628490,
+          "anyChangedPixels": 659026,
+          "meanLuma": [
+            171.32,
+            102.54
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix1g-a\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 68.4574,
+          "differentPixels": 630903,
+          "anyChangedPixels": 659124,
+          "meanLuma": [
+            172.11,
+            102.78
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix1g-a\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 68.5571,
+          "differentPixels": 631822,
+          "anyChangedPixels": 660234,
+          "meanLuma": [
+            171.48,
+            102.39
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix1g-a\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-a vs r162-fix2-a": {
+      "allPass": false,
+      "frames": {
+        "f001": {
+          "differentPct": 24.8655,
+          "differentPixels": 229160,
+          "anyChangedPixels": 271077,
+          "meanLuma": [
+            152.56,
+            141.93
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix2-a\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 7.6976,
+          "differentPixels": 70941,
+          "anyChangedPixels": 122500,
+          "meanLuma": [
+            171.32,
+            167.75
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix2-a\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 7.5752,
+          "differentPixels": 69813,
+          "anyChangedPixels": 115143,
+          "meanLuma": [
+            172.11,
+            168.67
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix2-a\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 8.0316,
+          "differentPixels": 74019,
+          "anyChangedPixels": 121497,
+          "meanLuma": [
+            171.48,
+            167.86
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix2-a\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-a vs r162-fix3-a": {
+      "allPass": true,
+      "frames": {
+        "f001": {
+          "differentPct": 0.0202,
+          "differentPixels": 186,
+          "anyChangedPixels": 19587,
+          "meanLuma": [
+            152.56,
+            152.58
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix3-a\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0.0221,
+          "differentPixels": 204,
+          "anyChangedPixels": 22736,
+          "meanLuma": [
+            171.32,
+            171.3
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix3-a\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0.0393,
+          "differentPixels": 362,
+          "anyChangedPixels": 17296,
+          "meanLuma": [
+            172.11,
+            172.08
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix3-a\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0.0204,
+          "differentPixels": 188,
+          "anyChangedPixels": 20736,
+          "meanLuma": [
+            171.48,
+            171.46
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix3-a\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-a vs r162-fix3-naive": {
+      "allPass": false,
+      "frames": {
+        "f001": {
+          "differentPct": 35.9827,
+          "differentPixels": 331617,
+          "anyChangedPixels": 408485,
+          "meanLuma": [
+            152.56,
+            159.59
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix3-naive\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 22.4404,
+          "differentPixels": 206811,
+          "anyChangedPixels": 242153,
+          "meanLuma": [
+            171.32,
+            171.85
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix3-naive\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 22.8919,
+          "differentPixels": 210972,
+          "anyChangedPixels": 240039,
+          "meanLuma": [
+            172.11,
+            172.31
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix3-naive\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 24.099,
+          "differentPixels": 222096,
+          "anyChangedPixels": 256623,
+          "meanLuma": [
+            171.48,
+            171.32
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-a__vs__r162-fix3-naive\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-gpu-a vs r118-gpu-b": {
+      "allPass": true,
+      "frames": {
+        "f001": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            152.52,
+            152.52
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-gpu-a__vs__r118-gpu-b\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171.29,
+            171.29
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-gpu-a__vs__r118-gpu-b\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            172.08,
+            172.08
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-gpu-a__vs__r118-gpu-b\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171.45,
+            171.45
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-gpu-a__vs__r118-gpu-b\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-gpu-a vs r162-fix3-gpu": {
+      "allPass": true,
+      "frames": {
+        "f001": {
+          "differentPct": 0.0201,
+          "differentPixels": 185,
+          "anyChangedPixels": 19499,
+          "meanLuma": [
+            152.52,
+            152.55
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-gpu-a__vs__r162-fix3-gpu\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0.0214,
+          "differentPixels": 197,
+          "anyChangedPixels": 22558,
+          "meanLuma": [
+            171.29,
+            171.27
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-gpu-a__vs__r162-fix3-gpu\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0.0399,
+          "differentPixels": 368,
+          "anyChangedPixels": 17110,
+          "meanLuma": [
+            172.08,
+            172.06
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-gpu-a__vs__r162-fix3-gpu\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0.02,
+          "differentPixels": 184,
+          "anyChangedPixels": 20667,
+          "meanLuma": [
+            171.45,
+            171.43
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-gpu-a__vs__r162-fix3-gpu\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-naive-a vs r118-naive-b": {
+      "allPass": true,
+      "frames": {
+        "f001": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            152.64,
+            152.64
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-naive-a__vs__r118-naive-b\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            169.55,
+            169.55
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-naive-a__vs__r118-naive-b\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171,
+            171
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-naive-a__vs__r118-naive-b\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            170.67,
+            170.67
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-naive-a__vs__r118-naive-b\\f180.diff.jpg"
+        }
+      }
+    },
+    "r118-nowait-a vs r118-nowait-b": {
+      "allPass": false,
+      "frames": {
+        "f001": {
+          "differentPct": 1.977,
+          "differentPixels": 18220,
+          "anyChangedPixels": 19100,
+          "meanLuma": [
+            153,
+            152.56
+          ],
+          "pass": false,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-nowait-a__vs__r118-nowait-b\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0.0035,
+          "differentPixels": 32,
+          "anyChangedPixels": 11432,
+          "meanLuma": [
+            171.32,
+            171.32
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-nowait-a__vs__r118-nowait-b\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            172.11,
+            172.11
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-nowait-a__vs__r118-nowait-b\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171.48,
+            171.48
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r118-nowait-a__vs__r118-nowait-b\\f180.diff.jpg"
+        }
+      }
+    },
+    "r162-fix2-a vs r162-fix2-b": {
+      "allPass": true,
+      "frames": {
+        "f001": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            141.93,
+            141.93
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r162-fix2-a__vs__r162-fix2-b\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            167.75,
+            167.75
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r162-fix2-a__vs__r162-fix2-b\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            168.67,
+            168.67
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r162-fix2-a__vs__r162-fix2-b\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            167.86,
+            167.86
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r162-fix2-a__vs__r162-fix2-b\\f180.diff.jpg"
+        }
+      }
+    },
+    "r162-fix3-a vs r162-fix3-b": {
+      "allPass": true,
+      "frames": {
+        "f001": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            152.58,
+            152.58
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r162-fix3-a__vs__r162-fix3-b\\f001.diff.jpg"
+        },
+        "f060": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171.3,
+            171.3
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r162-fix3-a__vs__r162-fix3-b\\f060.diff.jpg"
+        },
+        "f120": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            172.08,
+            172.08
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r162-fix3-a__vs__r162-fix3-b\\f120.diff.jpg"
+        },
+        "f180": {
+          "differentPct": 0,
+          "differentPixels": 0,
+          "anyChangedPixels": 0,
+          "meanLuma": [
+            171.46,
+            171.46
+          ],
+          "pass": true,
+          "diffImage": "C:\\Users\\LilMG\\AppData\\Local\\Temp\\yc.local\\wow-probe.local\\diffs\\r162-fix3-a__vs__r162-fix3-b\\f180.diff.jpg"
+        }
+      }
+    }
+  }
+}
