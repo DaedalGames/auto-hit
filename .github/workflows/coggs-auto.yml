@@ -1,0 +1,192 @@
+# COGGS Auto plays every pull request: base and head replay the same route with the same seed on SwiftShader,
+# and the frames, their diff and the verdict land on the pull request as one comment by Daedal Ping.
+name: coggs-auto
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions: {}
+concurrency:
+  group: coggs-auto-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  coggs-auto:
+    # Plays PR code, so it holds no secret and no write access. The player, routes and threshold come
+    # from the base commit, so a pull request cannot loosen them.
+    name: coggs-auto
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: head
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: base/package-lock.json
+      - name: install the player from base
+        working-directory: base
+        run: npm ci --no-audit --no-fund && npx playwright install --with-deps --only-shell chromium
+      - name: replay base and head
+        id: qa
+        working-directory: base
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set +e
+          node auto/depth-first-qa.mjs --base . --head ../head --out ../out --renderer swiftshader --base-sha "$BASE_SHA" --head-sha "$HEAD_SHA"
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+      - name: upload the verdict
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coggs-auto-verdict
+          path: |
+            out/verdict.json
+            out/raw.json
+            out/comment.md
+          if-no-files-found: error
+      - name: upload the frames
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coggs-auto-frames
+          path: |
+            out/*/f*-base.jpg
+            out/*/f*-head.jpg
+            out/*/f*-diff.png
+          if-no-files-found: ignore
+      - name: fail the check on FAIL
+        env:
+          QA_EXIT: ${{ steps.qa.outputs.exit }}
+        run: exit "$QA_EXIT"
+
+  publish:
+    # Never runs PR code: pushes the frames to the coggs-auto-frames branch and posts the one comment as Ping.
+    needs: coggs-auto
+    if: always() && needs.coggs-auto.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    env:
+      PR: ${{ github.event.pull_request.number }}
+      REPO: ${{ github.repository }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund --ignore-scripts
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: coggs-auto-verdict
+          path: out
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        continue-on-error: true
+        with:
+          name: coggs-auto-frames
+          path: out
+      - id: ping
+        continue-on-error: true
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.PING_APP_ID }}
+          private-key: ${{ secrets.PING_APP_PRIVATE_KEY }}
+      - name: push the frames
+        id: frames
+        env:
+          TOKEN: ${{ steps.ping.outputs.token || github.token }}
+          AS_PING: ${{ steps.ping.outputs.token != '' }}
+        run: |
+          set -eu
+          work="$RUNNER_TEMP/frames"
+          git init -q "$work"
+          cd "$work"
+          if [ "$AS_PING" = true ]; then
+            git config user.name 'daedal-ping[bot]'
+            git config user.email '347993472+daedal-ping[bot]@users.noreply.github.com'
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          fi
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
+          pushed=no
+          for try in 1 2 3 4 5; do
+            if git fetch -q --depth 1 origin coggs-auto-frames; then
+              git checkout -q -B coggs-auto-frames FETCH_HEAD
+            else
+              git checkout -q --orphan coggs-auto-frames
+            fi
+            rm -rf "pr-${PR}"
+            mkdir -p "pr-${PR}"
+            (cd "$GITHUB_WORKSPACE/out" && find . -mindepth 2 -maxdepth 2 -type f \( -name 'f*-base.jpg' -o -name 'f*-head.jpg' -o -name 'f*-diff.png' \) -exec cp --parents {} "$work/pr-${PR}/" \;)
+            git add -A "pr-${PR}"
+            git commit -q --allow-empty -m "frames: pr-${PR} at ${HEAD_SHA}"
+            if git push -q origin HEAD:coggs-auto-frames; then pushed=yes; break; fi
+            sleep $((try * 3))
+          done
+          [ "$pushed" = yes ]
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: write the comment with frame links pinned to that commit
+        env:
+          FRAMES_SHA: ${{ steps.frames.outputs.sha }}
+        run: node auto/verdict.mjs --out out --frames-url "https://raw.githubusercontent.com/${REPO}/${FRAMES_SHA}/pr-${PR}/"
+      - name: post or update the one comment
+        id: comment
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PING_TOKEN: ${{ steps.ping.outputs.token }}
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- coggs-auto -->';
+            const body = fs.readFileSync('out/comment.md', 'utf8');
+            const repo = { owner: context.repo.owner, repo: context.repo.repo };
+            const comments = await github.paginate(github.rest.issues.listComments, { ...repo, issue_number: context.issue.number });
+            const mine = comments.filter((c) => c.body && c.body.startsWith(marker));
+            // Daedal Ping posts; GITHUB_TOKEN is used only when Ping's token is missing or its call errors.
+            const tries = [];
+            if (process.env.PING_TOKEN) tries.push(['daedal-ping[bot]', getOctokit(process.env.PING_TOKEN)]);
+            tries.push(['github-actions[bot]', github]);
+            let posted, lastError;
+            for (const [login, client] of tries) {
+              const own = mine.find((c) => c.user.login === login);
+              try {
+                posted = own
+                  ? (await client.rest.issues.updateComment({ ...repo, comment_id: own.id, body })).data
+                  : (await client.rest.issues.createComment({ ...repo, issue_number: context.issue.number, body })).data;
+                break;
+              } catch (e) {
+                lastError = e;
+                core.warning(login + ' could not post: ' + e.status + ' ' + e.message);
+              }
+            }
+            if (!posted) throw lastError;
+            // Keep one comment: remove older copies whichever identity wrote them.
+            for (const c of mine) {
+              if (c.id === posted.id) continue;
+              const owner = tries.find(([login]) => login === c.user.login);
+              await (owner ? owner[1] : github).rest.issues.deleteComment({ ...repo, comment_id: c.id }).catch((e) => core.warning('could not delete ' + c.id + ': ' + e.status));
+            }
+            core.info('comment: ' + posted.html_url);
+            core.setOutput('url', posted.html_url);
+            core.summary.addRaw(body).addLink('COGGS Auto comment', posted.html_url).write();
