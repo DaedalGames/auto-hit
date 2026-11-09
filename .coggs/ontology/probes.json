@@ -1,0 +1,335 @@
+{
+  "version": 1,
+  "probes": [
+    {
+      "id": "color.mean-luminance",
+      "face": "color",
+      "input": "Replay the depth-first route on base and head.",
+      "observe": "Mean luminance and saturation per capture; a uniform shift across every capture names an output color change, a shift only on model pixels names a texture color change.",
+      "source": {
+        "doc": "docs/gamedev/render/color.md",
+        "anchor": "R2.4",
+        "note": "Lightness separates hero, floor and background before hue."
+      }
+    },
+    {
+      "id": "color.grayscale-contrast",
+      "face": "color",
+      "input": "Press the move keys, then wait the same time with no input; the region that changes is the hero box.",
+      "observe": "Mean grayscale lightness of the hero box against its surroundings, base versus head.",
+      "source": {
+        "doc": "docs/gamedev/render/color.md",
+        "anchor": "R2.4",
+        "note": "The moving region is taken as the hero box; no threshold is set."
+      }
+    },
+    {
+      "id": "color.palette-drift",
+      "face": "color",
+      "input": "Round each head capture pixel to the nearest base-capture color in OKLab.",
+      "observe": "Share of pixels far from every base color.",
+      "source": {
+        "doc": "docs/gamedev/render/color.md",
+        "anchor": "R2.1",
+        "note": "Distance in OKLab to the build palette; observed as a distribution."
+      }
+    },
+    {
+      "id": "lighting.dark-side",
+      "face": "lighting",
+      "input": "Capture a lit object with the default rig.",
+      "observe": "Lightness on the lit and the far side; the far side must stay above zero and the gap must survive the upgrade.",
+      "source": {
+        "doc": "docs/gamedev/render/lighting.md",
+        "anchor": "R4.1",
+        "note": "Render a grey sphere; lit and far sides must differ and the far side is not zero."
+      }
+    },
+    {
+      "id": "lighting.shadow-floor",
+      "face": "lighting",
+      "input": "Frame an object over flat ground.",
+      "observe": "Stripes on the floor (acne) and a gap between object and shadow (peter panning).",
+      "source": {
+        "doc": "docs/gamedev/render/lighting.md",
+        "anchor": "R4.2",
+        "note": "No stripes on the floor and the shadow stays attached."
+      }
+    },
+    {
+      "id": "lighting.camera-sweep",
+      "face": "lighting",
+      "input": "Move the camera slowly across consecutive frames.",
+      "observe": "Shadow edges jumping between consecutive captures.",
+      "source": {
+        "doc": "docs/gamedev/render/lighting.md",
+        "anchor": "R4.3",
+        "note": "Cascade splits recomputed per frame make shadow edges shimmer."
+      }
+    },
+    {
+      "id": "loaders.asset-paths",
+      "face": "loaders",
+      "input": "Load every scene the game opens.",
+      "observe": "Every requested asset path returns 200 on head as on base; list new 404s and decode errors.",
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.6",
+        "note": "Every asset path the scene file requests exists and loads."
+      }
+    },
+    {
+      "id": "loaders.gltf-validate",
+      "face": "loaders",
+      "input": "Run the Khronos glTF Validator over every .glb and .gltf the game ships.",
+      "observe": "Validator errors; an error blocks the PR.",
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.1",
+        "note": "Pass every exported .glb through glTF Validator before upload."
+      }
+    },
+    {
+      "id": "loaders.animation-play",
+      "face": "loaders",
+      "input": "Capture a character mid-animation at a fixed step on base and head.",
+      "observe": "Bones in the same pose; feet do not slide, joints do not fold.",
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.5",
+        "note": "AnimationMixer plays clips; bone names map between skeletons."
+      }
+    },
+    {
+      "id": "input.korean-layout",
+      "face": "input",
+      "input": "Replay the route with KeyboardEvent.code kept and key replaced by the Korean two-set jamo on the same physical key.",
+      "observe": "The game still moves exactly as with the US layout.",
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.4",
+        "note": "keyboard-layout measures whether the build moves under Korean-layout key values."
+      }
+    },
+    {
+      "id": "input.pointer-lock-escape",
+      "face": "input",
+      "input": "Lock the pointer, then press Escape.",
+      "observe": "The game pauses and shows a prompt to lock again.",
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.11",
+        "note": "After ESC releases the lock the game stops and shows the relock prompt."
+      }
+    },
+    {
+      "id": "input.touch-joystick",
+      "face": "input",
+      "input": "Emulate a phone and drag the virtual stick or the canvas.",
+      "observe": "The drag direction reaches the game state and moves the camera or hero.",
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.3",
+        "note": "Dragging the stick under device emulation must enter the game input."
+      }
+    },
+    {
+      "id": "input.gamepad-idle",
+      "face": "input",
+      "input": "Connect a gamepad with axes inside the dead zone and give no input.",
+      "observe": "Movement input stays zero.",
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.2",
+        "note": "Idle axes inside the threshold give zero movement."
+      }
+    },
+    {
+      "id": "input.gamepad-disconnect",
+      "face": "input",
+      "input": "Plant a gamepad disconnect event mid-play.",
+      "observe": "The run pauses and a notice appears.",
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.10",
+        "note": "A planted disconnect stops the run and shows a notice."
+      }
+    },
+    {
+      "id": "input.same-input-triggers",
+      "face": "input",
+      "input": "Press, double-press and hold each bound key, and press two bound keys at once.",
+      "observe": "No trigger masks another and each produces its own action.",
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.9",
+        "note": "Two triggers on one input must not mask each other."
+      }
+    },
+    {
+      "id": "audio.first-gesture",
+      "face": "audio",
+      "input": "Load, then play the scripted route.",
+      "observe": "At least one AudioContext, resumed after the first gesture, zero blocked media elements.",
+      "source": {
+        "doc": "docs/gamedev/sound.md",
+        "anchor": "## 첫 제스처에서 여는 오디오",
+        "note": "audio.contexts >= 1, audio.resumed true after play, audio.blockedMedia 0."
+      }
+    },
+    {
+      "id": "audio.hide-return",
+      "face": "audio",
+      "input": "Hide the page mid-play, then show it and press a key.",
+      "observe": "Sustained sources stop while hidden and run again on the next input.",
+      "source": {
+        "doc": "docs/gamedev/sound.md",
+        "anchor": "## 떠났다 돌아올 때",
+        "note": "Hide and return; sources pause, then resume to running on the next input."
+      }
+    },
+    {
+      "id": "audio.mute-persists",
+      "face": "audio",
+      "input": "Press mute, then reload.",
+      "observe": "Master gain is zero and mute survives the reload as a saved setting.",
+      "source": {
+        "doc": "docs/gamedev/sound.md",
+        "anchor": "## 섞임과 음소거",
+        "note": "Mute sets master gain to zero and persists through reload."
+      }
+    },
+    {
+      "id": "physics.settle",
+      "face": "physics",
+      "input": "Leave stacked or resting bodies with no input.",
+      "observe": "Velocities go to zero and bodies sleep on head as on base.",
+      "source": {
+        "doc": "docs/gamedev/design/physics.md",
+        "anchor": "D5.1",
+        "note": "Stacked bodies left alone reach zero velocity and sleep."
+      }
+    },
+    {
+      "id": "physics.frame-rate",
+      "face": "physics",
+      "input": "Replay the same route with requestAnimationFrame throttled to 30 Hz and raised to 144 Hz.",
+      "observe": "The end state matches the 60 Hz run; a mismatch means the step follows frame time.",
+      "source": {
+        "doc": "docs/gamedev/production/determinism.md",
+        "anchor": "T1.1",
+        "note": "The simulation runs at a fixed step; rendering only reads state."
+      }
+    },
+    {
+      "id": "physics.same-seed-twice",
+      "face": "physics",
+      "input": "Replay the route twice with the same seed on head.",
+      "observe": "Event logs and captures are identical; a difference means unseeded randomness entered.",
+      "source": {
+        "doc": "docs/gamedev/production/determinism.md",
+        "anchor": "T1.2",
+        "note": "Two runs with one seed give byte-identical event logs."
+      }
+    },
+    {
+      "id": "save.reload-roundtrip",
+      "face": "save",
+      "input": "Play until something saves, then reload.",
+      "observe": "The saved value comes back; a save failure shows on screen.",
+      "source": {
+        "doc": "docs/gamedev/systems/save.md",
+        "anchor": "S1.2",
+        "note": "Save, reload and read the same value; failures are visible."
+      }
+    },
+    {
+      "id": "save.old-version",
+      "face": "save",
+      "input": "Seed localStorage with a save written by the base build, then open head.",
+      "observe": "Head reads it into an in-range state and every saved JSON carries an integer version.",
+      "source": {
+        "doc": "docs/gamedev/systems/save.md",
+        "anchor": "S1.4",
+        "note": "Old-version samples must load into an in-range state."
+      }
+    },
+    {
+      "id": "save.storage-denied",
+      "face": "save",
+      "input": "Make localStorage throw (quota or private mode) and play.",
+      "observe": "The game keeps running and shows that saving failed.",
+      "source": {
+        "doc": "docs/gamedev/systems/save.md",
+        "anchor": "S1.2",
+        "note": "A save failure surfaces on screen."
+      }
+    },
+    {
+      "id": "network.offline-assets",
+      "face": "network",
+      "input": "Block every host outside the game folder and play.",
+      "observe": "The game still loads and plays; list each outside host it needed.",
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Reliability: availability, fault tolerance, recovery, login, download, network."
+      }
+    },
+    {
+      "id": "network.cross-renderer",
+      "face": "network",
+      "input": "Replay the same route on SwiftShader and on a GPU or a second browser.",
+      "observe": "Same verdict on both; a split names a float or precision dependency.",
+      "source": {
+        "doc": "docs/gamedev/social/netcode.md",
+        "anchor": "M2.5",
+        "note": "The same input record hashes the same per step across browsers and devices."
+      }
+    },
+    {
+      "id": "network.latency-loss",
+      "face": "network",
+      "input": "For multiplayer games, replay one input record on two clients with latency and 2% loss.",
+      "observe": "Non-authority clients do not solve constraints on their own and stay within the interpolation buffer.",
+      "source": {
+        "doc": "docs/gamedev/social/netcode.md",
+        "anchor": "M2.8",
+        "note": "Two clients with latency and 2% loss stay within the interpolation buffer of the authority."
+      }
+    },
+    {
+      "id": "runtime.webgl1",
+      "face": "runtime",
+      "input": "Open the game with WebGL 2 disabled.",
+      "observe": "The game either runs on its fallback or shows a clear message; never a blank canvas.",
+      "source": {
+        "doc": "docs/gamedev/render/shaders.md",
+        "anchor": "R3.2",
+        "note": "Materials compile and draw one frame without errors."
+      }
+    },
+    {
+      "id": "runtime.viewport-sweep",
+      "face": "runtime",
+      "input": "Open the game at 320, 390, 430, 768, 1024, 1440 and 1920 px wide at 640 and 900 px tall.",
+      "observe": "No horizontal overflow and no empty stage (luminance variance under 25).",
+      "source": {
+        "doc": "docs/gamedev/device.md",
+        "anchor": "## 방향과 비율",
+        "note": "The widths gate opens seven widths at two heights and catches overflow and an empty stage."
+      }
+    },
+    {
+      "id": "runtime.dpr",
+      "face": "runtime",
+      "input": "Emulate device pixel ratios 2 and 3 and shrink the viewport height by an address bar.",
+      "observe": "The largest canvas backing width over its on-screen width equals the ratio (or its cap) and the canvas stays inside the viewport.",
+      "source": {
+        "doc": "docs/gamedev/device.md",
+        "anchor": "## 캔버스의 크기와 선명도",
+        "note": "Canvas backing to CSS ratio equals devicePixelRatio; the canvas stays inside a shortened viewport."
+      }
+    }
+  ]
+}

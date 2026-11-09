@@ -1,0 +1,1169 @@
+{
+  "version": 1,
+  "lanes": [
+    {
+      "id": "frames",
+      "name": "depth-first-qa frames",
+      "what": "pixel diff of the replayed route against base, 0.1% of pixels per frame",
+      "detect": [
+        {
+          "file": "auto/depth-first-qa.mjs",
+          "contains": "differPct"
+        }
+      ]
+    },
+    {
+      "id": "page-errors",
+      "name": "depth-first-qa page errors",
+      "what": "uncaught exceptions new on head",
+      "detect": [
+        {
+          "file": "auto/play.mjs",
+          "contains": "'pageerror'"
+        }
+      ]
+    },
+    {
+      "id": "console-errors",
+      "name": "depth-first-qa console errors",
+      "what": "console.error lines new on head",
+      "detect": [
+        {
+          "file": "auto/play.mjs",
+          "contains": "consoleErrors"
+        }
+      ]
+    },
+    {
+      "id": "failed-requests",
+      "name": "depth-first-qa failed requests",
+      "what": "requests that failed while the route played",
+      "detect": [
+        {
+          "file": "auto/play.mjs",
+          "contains": "requestfailed"
+        }
+      ]
+    },
+    {
+      "id": "outside-requests",
+      "name": "depth-first-qa outside requests",
+      "what": "requests to hosts outside the game folder",
+      "detect": [
+        {
+          "file": "auto/play.mjs",
+          "contains": "outsideRequests"
+        }
+      ]
+    },
+    {
+      "id": "no-canvas",
+      "name": "depth-first-qa ready gate",
+      "what": "no canvas or no quiet network before the route starts",
+      "detect": [
+        {
+          "file": "auto/play.mjs",
+          "contains": "noCanvas"
+        }
+      ]
+    },
+    {
+      "id": "random-calls",
+      "name": "depth-first-qa randomness count",
+      "what": "Math.random calls seen during the run",
+      "detect": [
+        {
+          "file": "auto/play.mjs",
+          "contains": "randomCalls"
+        }
+      ]
+    },
+    {
+      "id": "breadth-first-qa",
+      "name": "breadth-first-qa probes",
+      "what": "edge probes from probes.json; a probe is live only when Auto code names its id",
+      "detect": [
+        {
+          "file": "auto/breadth-first-qa.mjs",
+          "contains": ""
+        }
+      ]
+    }
+  ],
+  "faces": [
+    {
+      "id": "color",
+      "name": "Render: color and output",
+      "keywords": [
+        "color",
+        "colour",
+        "tone",
+        "contrast",
+        "bright",
+        "dark",
+        "saturat",
+        "gamma",
+        "srgb"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/color.md",
+        "anchor": "R2.4",
+        "note": "Hero, floor and background separate by lightness first; a grayscale capture must still separate them."
+      },
+      "probes": [
+        "color.mean-luminance",
+        "color.grayscale-contrast",
+        "color.palette-drift"
+      ]
+    },
+    {
+      "id": "lighting",
+      "name": "Lighting and shadows",
+      "keywords": [
+        "light",
+        "shadow",
+        "dim",
+        "dark",
+        "shiny",
+        "shading",
+        "envmap",
+        "reflection"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/lighting.md",
+        "anchor": "R4.1",
+        "note": "Ambient, diffuse and specular terms; the dark side is never fully black."
+      },
+      "probes": [
+        "lighting.dark-side",
+        "lighting.shadow-floor",
+        "lighting.camera-sweep"
+      ]
+    },
+    {
+      "id": "loaders",
+      "name": "Loaders and assets",
+      "keywords": [
+        "load",
+        "model",
+        "texture",
+        "gltf",
+        "glb",
+        "fbx",
+        "asset",
+        "mesh",
+        "animation",
+        "missing"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.1",
+        "note": "Web 3D assets ship as glTF 2.0, one .glb per asset, validated before upload."
+      },
+      "probes": [
+        "loaders.asset-paths",
+        "loaders.gltf-validate",
+        "loaders.animation-play"
+      ]
+    },
+    {
+      "id": "input",
+      "name": "Input and controls",
+      "keywords": [
+        "input",
+        "key",
+        "click",
+        "drag",
+        "touch",
+        "mouse",
+        "camera",
+        "control",
+        "pointer",
+        "respond"
+      ],
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.4",
+        "note": "Input arrives as action names, not physical keys, read in one handler."
+      },
+      "probes": [
+        "input.korean-layout",
+        "input.pointer-lock-escape",
+        "input.touch-joystick",
+        "input.gamepad-idle",
+        "input.gamepad-disconnect",
+        "input.same-input-triggers"
+      ]
+    },
+    {
+      "id": "audio",
+      "name": "Audio",
+      "keywords": [
+        "audio",
+        "sound",
+        "music",
+        "silent",
+        "mute",
+        "volume",
+        "sfx"
+      ],
+      "source": {
+        "doc": "docs/gamedev/audio/mixing.md",
+        "anchor": "A3.1",
+        "note": "Audio opens on the first user gesture."
+      },
+      "probes": [
+        "audio.first-gesture",
+        "audio.hide-return",
+        "audio.mute-persists"
+      ]
+    },
+    {
+      "id": "physics",
+      "name": "Physics and simulation step",
+      "keywords": [
+        "physic",
+        "collision",
+        "fall",
+        "jitter",
+        "speed",
+        "drift",
+        "step",
+        "late",
+        "end",
+        "diverg"
+      ],
+      "source": {
+        "doc": "docs/gamedev/production/determinism.md",
+        "anchor": "T1.1",
+        "note": "Simulation runs a fixed-step step function; rendering only reads the state."
+      },
+      "probes": [
+        "physics.settle",
+        "physics.frame-rate",
+        "physics.same-seed-twice"
+      ]
+    },
+    {
+      "id": "save",
+      "name": "Save and persistence",
+      "keywords": [
+        "save",
+        "progress",
+        "reload",
+        "storage",
+        "localstorage",
+        "score",
+        "lost",
+        "reset"
+      ],
+      "source": {
+        "doc": "docs/gamedev/systems/save.md",
+        "anchor": "S1.4",
+        "note": "Saved data carries an integer version and old-version samples must still load."
+      },
+      "probes": [
+        "save.reload-roundtrip",
+        "save.old-version",
+        "save.storage-denied"
+      ]
+    },
+    {
+      "id": "network",
+      "name": "Network and cross-machine determinism",
+      "keywords": [
+        "network",
+        "offline",
+        "cdn",
+        "request",
+        "wasm",
+        "decoder",
+        "browser",
+        "gpu",
+        "renderer",
+        "sync"
+      ],
+      "source": {
+        "doc": "docs/gamedev/social/netcode.md",
+        "anchor": "M2.5",
+        "note": "The same input record must give the same state on every browser and device."
+      },
+      "probes": [
+        "network.offline-assets",
+        "network.cross-renderer",
+        "network.latency-loss"
+      ]
+    },
+    {
+      "id": "runtime",
+      "name": "Runtime, modules and WebGL context",
+      "keywords": [
+        "blank",
+        "black",
+        "canvas",
+        "webgl",
+        "context",
+        "module",
+        "import",
+        "undefined",
+        "constructor",
+        "crash",
+        "freez"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/shaders.md",
+        "anchor": "R3.2",
+        "note": "A material template must compile without errors and draw one frame in the engine."
+      },
+      "probes": [
+        "runtime.webgl1",
+        "runtime.viewport-sweep",
+        "runtime.dpr"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "id": "loaders/color-space",
+      "faces": [
+        "loaders",
+        "color"
+      ],
+      "title": "Texture and loader color space after the colorSpace switch",
+      "breaks": "r152 replaced Texture.encoding with Texture.colorSpace (default NoColorSpace) and turned ColorManagement on, so textures on loaded models that relied on the old encoding read as linear and come out washed out or over-dark; FBXLoader and ICC handling changed earlier.",
+      "symptom": "colors washed out or faded on loaded models and textures while untextured geometry looks right",
+      "keywords": [
+        "washed out",
+        "loaded model",
+        "faded texture",
+        "texture color",
+        "gltf color",
+        "fbx color",
+        "encoding",
+        "colorspace",
+        "color",
+        "model",
+        "texture"
+      ],
+      "lanes": [
+        "frames"
+      ],
+      "partialLanes": [],
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.1",
+        "note": "A loaded model must look like its source in the engine (judgement line of the glTF node)."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`Texture.encoding` has been replaced with `Texture.colorSpace`"
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`THREE.ColorManagement.enabled` is now `true` by default."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`FBXLoader` now correctly sets the texture encoding."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "Embedded color space data (ICC-profiles) in texture images will now be ignored."
+        }
+      ],
+      "probes": [
+        "color.mean-luminance",
+        "loaders.asset-paths"
+      ]
+    },
+    {
+      "id": "color/output-color-space",
+      "faces": [
+        "color"
+      ],
+      "title": "Renderer output color space default",
+      "breaks": "r152 replaced outputEncoding with outputColorSpace defaulting to SRGBColorSpace, so a game that never set outputEncoding now gets sRGB output and every frame shifts in tone.",
+      "symptom": "the whole frame is brighter, washed out or differently saturated, every capture differs",
+      "keywords": [
+        "whole frame",
+        "washed out",
+        "too bright",
+        "brighter",
+        "saturat",
+        "gamma",
+        "srgb",
+        "output encoding",
+        "color"
+      ],
+      "lanes": [
+        "frames"
+      ],
+      "partialLanes": [],
+      "source": {
+        "doc": "docs/gamedev/render/color.md",
+        "anchor": "R2.4",
+        "note": "Hero must stay readable against the background in a grayscale capture."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`WebGLRenderer.outputEncoding` has been replaced with `WebGLRenderer.outputColorSpace`"
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`WebGLRenderer.gammaOutput` has been removed."
+        }
+      ],
+      "probes": [
+        "color.mean-luminance",
+        "color.grayscale-contrast"
+      ]
+    },
+    {
+      "id": "color/tone-mapping",
+      "faces": [
+        "color"
+      ],
+      "title": "Tone mapping moved to the output pass",
+      "breaks": "Inline tone mapping now applies only when rendering to screen, so post-processed games lose tone mapping unless they add OutputPass; the default is NoToneMapping.",
+      "symptom": "post-processed scenes look flat, blown out or lose contrast; scenes without post-processing are unchanged",
+      "keywords": [
+        "tone mapping",
+        "post processing",
+        "postprocess",
+        "bloom",
+        "blown out",
+        "flat",
+        "contrast",
+        "composer"
+      ],
+      "lanes": [
+        "frames"
+      ],
+      "partialLanes": [],
+      "source": {
+        "doc": "docs/gamedev/render/color.md",
+        "anchor": "R2.4",
+        "note": "Lightness contrast between hero and surroundings is the readability floor."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "The inline tone mapping controlled via `WebGLRenderer.toneMapping` only works when rendering to screen now"
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "The default value of `WebGLRenderer.toneMapping` is now `NoToneMapping`."
+        }
+      ],
+      "probes": [
+        "color.grayscale-contrast"
+      ]
+    },
+    {
+      "id": "lighting/legacy-lights",
+      "faces": [
+        "lighting"
+      ],
+      "title": "Physically correct light units by default",
+      "breaks": "r155 set useLegacyLights to false, so light intensities are read in physical units and scenes tuned for legacy units render much darker.",
+      "symptom": "the scene is much darker or lights look dim after the upgrade, geometry is unchanged",
+      "keywords": [
+        "too dark",
+        "darker",
+        "dim",
+        "light intensity",
+        "lighting",
+        "dark scene",
+        "light"
+      ],
+      "lanes": [
+        "frames"
+      ],
+      "partialLanes": [],
+      "source": {
+        "doc": "docs/gamedev/render/lighting.md",
+        "anchor": "R4.1",
+        "note": "The default rig adds ambient, diffuse and specular terms; a directional light plays the sun."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`WebGLRenderer.useLegacyLights` is now set to `false` by default and deprecated."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`WebGLRenderer.physicallyCorrectLights = true` is now `WebGLRenderer.useLegacyLights = false`."
+        }
+      ],
+      "probes": [
+        "lighting.dark-side",
+        "color.mean-luminance"
+      ]
+    },
+    {
+      "id": "lighting/decay",
+      "faces": [
+        "lighting"
+      ],
+      "title": "Point and spot light decay default",
+      "breaks": "PointLight and SpotLight decay now defaults to 2, so lights with no decay set fall off faster.",
+      "symptom": "areas lit by point or spot lights turn dark away from the light; directional light areas unchanged",
+      "keywords": [
+        "point light",
+        "spot light",
+        "falloff",
+        "decay",
+        "dark corner",
+        "torch",
+        "lamp"
+      ],
+      "lanes": [
+        "frames"
+      ],
+      "partialLanes": [],
+      "source": {
+        "doc": "docs/gamedev/render/lighting.md",
+        "anchor": "R4.1",
+        "note": "Fill and rim strengths are per-game choices on top of the default rig."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "The `decay` property of `PointLight` and `SpotLight` has now a physically correct default value (`2`)."
+        }
+      ],
+      "probes": [
+        "lighting.dark-side"
+      ]
+    },
+    {
+      "id": "lighting/shadow-api",
+      "faces": [
+        "lighting"
+      ],
+      "title": "Shadow classes left the public API",
+      "breaks": "LightShadow, SpotLightShadow and DirectionalLightShadow left the public API, so code that constructs them throws.",
+      "symptom": "page error naming a Shadow class, or shadows vanish",
+      "keywords": [
+        "shadow",
+        "lightshadow",
+        "shadows missing",
+        "no shadow"
+      ],
+      "lanes": [
+        "page-errors"
+      ],
+      "partialLanes": [
+        "frames"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/lighting.md",
+        "anchor": "R4.2",
+        "note": "Shadows come from a depth map with a small bias; acne and peter panning are the two failure looks."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`LightShadow` has been removed from the public API."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`SpotLightShadow` and `DirectionalLightShadow` have been removed from the public API."
+        }
+      ],
+      "probes": [
+        "lighting.shadow-floor"
+      ]
+    },
+    {
+      "id": "lighting/pbr-shading",
+      "faces": [
+        "lighting",
+        "color"
+      ],
+      "title": "PBR and Lambert shading changes",
+      "breaks": "Standard and Physical materials became more correct (less shiny when rough), envMap is converted to PMREM, IBL preserves energy, and Lambert moved to per-fragment shading.",
+      "symptom": "materials look less shiny, metals brighter, or shading smoother; small diffs spread over every lit surface",
+      "keywords": [
+        "shiny",
+        "glossy",
+        "metal",
+        "reflection",
+        "envmap",
+        "shading",
+        "material",
+        "smooth",
+        "rough"
+      ],
+      "lanes": [
+        "frames"
+      ],
+      "partialLanes": [],
+      "source": {
+        "doc": "docs/gamedev/render/lighting.md",
+        "anchor": "R4.5",
+        "note": "Global illumination choice decides how indirect light reaches the scene."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "shaders are now more correct and may result in less shiny renders for models using rough materials."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "The `envMap` property of `MeshStandardMaterial` and `MeshPhysicalMaterial` is now internally converted to a PMREM."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`MeshLambertMaterial` now uses per-fragment shading."
+        }
+      ],
+      "probes": [
+        "lighting.dark-side"
+      ]
+    },
+    {
+      "id": "loaders/examples-js",
+      "faces": [
+        "loaders",
+        "runtime"
+      ],
+      "title": "examples/js removed and import maps required",
+      "breaks": "r148 removed examples/js, so script-tag addons such as GLTFLoader or OrbitControls stop existing; ES module imports of three need an import map.",
+      "symptom": "page error \"is not a constructor\" or \"Failed to resolve module specifier\", 404 on an examples/js file, nothing loads",
+      "keywords": [
+        "not a constructor",
+        "examples js",
+        "gltfloader",
+        "orbitcontrols",
+        "failed to resolve module specifier",
+        "import map",
+        "404",
+        "undefined"
+      ],
+      "lanes": [
+        "page-errors",
+        "failed-requests",
+        "no-canvas"
+      ],
+      "partialLanes": [],
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.6",
+        "note": "Every asset path a scene requests must exist and load."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "The `examples/js` directory has been removed."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "now requires the usage of an import map to resolve the `three` bare import specifier."
+        }
+      ],
+      "probes": [
+        "loaders.asset-paths"
+      ]
+    },
+    {
+      "id": "loaders/gltf-shape",
+      "faces": [
+        "loaders"
+      ],
+      "title": "GLTFLoader result shape and material defaults",
+      "breaks": "GLTFLoader returns a Group instead of a Scene, sets depthWrite false on transparent materials, keeps node order, and dropped spec-gloss materials.",
+      "symptom": "transparent parts sort wrong, some models turn grey or black, or code walking gltf.scene breaks",
+      "keywords": [
+        "transparent",
+        "sorting",
+        "grey model",
+        "black model",
+        "spec gloss",
+        "gltf",
+        "scene",
+        "group",
+        "depth"
+      ],
+      "lanes": [
+        "frames"
+      ],
+      "partialLanes": [
+        "page-errors"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.1",
+        "note": "glTF top-level elements are scenes, nodes, meshes, materials, textures, skins, animations."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`GLTFLoader` now returns an instance of `Group` instead of `Scene`."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`GLTFLoader` now sets `depthWrite` to `false` for transparent materials."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "Support for the `KHR_materials_pbrSpecularGlossiness` extensions has been removed from `GLTFLoader`"
+        }
+      ],
+      "probes": [
+        "loaders.gltf-validate"
+      ]
+    },
+    {
+      "id": "loaders/geometry-removed",
+      "faces": [
+        "loaders",
+        "runtime"
+      ],
+      "title": "Legacy Geometry removed from core",
+      "breaks": "r125 removed Geometry and Face3 from core, so games building meshes with THREE.Geometry throw and draw nothing.",
+      "symptom": "page error \"THREE.Geometry is not a constructor\", empty scene",
+      "keywords": [
+        "geometry",
+        "face3",
+        "not a constructor",
+        "empty scene",
+        "nothing drawn",
+        "vertices"
+      ],
+      "lanes": [
+        "page-errors"
+      ],
+      "partialLanes": [
+        "frames"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.2",
+        "note": "Meshes are indexed buffers optimized in a fixed order."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`Geometry` has been removed from the core."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`Mesh`, `Line` and `Points` no longer support raycasting with `Geometry`."
+        }
+      ],
+      "probes": [
+        "loaders.asset-paths"
+      ]
+    },
+    {
+      "id": "loaders/decoder-paths",
+      "faces": [
+        "loaders",
+        "network"
+      ],
+      "title": "Draco, Basis and KTX2 decoder paths",
+      "breaks": "Draco and Basis decoder libraries moved under examples/jsm/libs and KTX2Loader needs an updated transcoder, so compressed models fail to decode.",
+      "symptom": "failed request for a decoder .wasm or .js, compressed models missing",
+      "keywords": [
+        "draco",
+        "basis",
+        "ktx2",
+        "wasm",
+        "decoder",
+        "transcoder",
+        "compressed"
+      ],
+      "lanes": [
+        "failed-requests"
+      ],
+      "partialLanes": [
+        "outside-requests",
+        "frames"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/assets.md",
+        "anchor": "R7.2",
+        "note": "glTF files are optimized with gltfpack; compression is part of the pipeline."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "Users of ammo.js, Draco and Basis have to update their import paths"
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`KTX2Loader` requires an updated version of the Basis Universal transcoder"
+        }
+      ],
+      "probes": [
+        "loaders.asset-paths",
+        "network.offline-assets"
+      ]
+    },
+    {
+      "id": "input/controls-events",
+      "faces": [
+        "input"
+      ],
+      "title": "Controls moved to pointer events and explicit DOM element",
+      "breaks": "OrbitControls, TrackballControls and TransformControls use pointer events, stop listening to keys by default, and require the renderer canvas as domElement.",
+      "symptom": "camera no longer follows drag, wheel or keys; frames after input match frames before it; page error on domElement",
+      "keywords": [
+        "camera",
+        "drag",
+        "orbit",
+        "wheel",
+        "zoom",
+        "key",
+        "not respond",
+        "control",
+        "pointer",
+        "touch",
+        "domelement"
+      ],
+      "lanes": [
+        "breadth-first-qa"
+      ],
+      "partialLanes": [
+        "frames",
+        "page-errors"
+      ],
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.4",
+        "note": "Read input as actions in one handler; keyboard-layout swaps must still move the game."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`OrbitControls`, `TrackballControls` and `TransformControls` now use Pointer Events."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`OrbitControls` no longer listens to key events by default."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "The second constructor parameter `domElement` of `OrbitControls`"
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`DragControls`, `OrbitControls` and `TrackballControls` now use pointer events for touch interaction."
+        }
+      ],
+      "probes": [
+        "input.touch-joystick",
+        "input.korean-layout"
+      ]
+    },
+    {
+      "id": "input/raycast",
+      "faces": [
+        "input"
+      ],
+      "title": "Raycaster defaults",
+      "breaks": "Raycaster intersection is recursive by default and honors invisible objects, so clicks can pick children or hidden meshes.",
+      "symptom": "clicks select the wrong object, hover highlights flicker, picking hits invisible meshes",
+      "keywords": [
+        "click",
+        "pick",
+        "select",
+        "hover",
+        "raycast",
+        "wrong object",
+        "tap"
+      ],
+      "lanes": [
+        "breadth-first-qa"
+      ],
+      "partialLanes": [
+        "frames"
+      ],
+      "source": {
+        "doc": "docs/gamedev/feel/input.md",
+        "anchor": "F1.8",
+        "note": "Each screen state enables its own input context; two contexts never claim one input at one priority."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "The `recursive` parameter of `Raycaster.intersectObject()` and `Raycaster.intersectObjects()` is now `true` by default."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`Raycaster` honors now invisible 3D objects in intersection tests."
+        }
+      ],
+      "probes": [
+        "input.same-input-triggers"
+      ]
+    },
+    {
+      "id": "audio/start-time",
+      "faces": [
+        "audio"
+      ],
+      "title": "Audio.startTime removed",
+      "breaks": "Audio.startTime was removed in favor of Audio.play(delay).",
+      "symptom": "sound starts at the wrong moment or not at all; possible page error",
+      "keywords": [
+        "audio",
+        "sound",
+        "start time",
+        "delay",
+        "music start",
+        "silent"
+      ],
+      "lanes": [
+        "breadth-first-qa"
+      ],
+      "partialLanes": [
+        "page-errors",
+        "console-errors"
+      ],
+      "source": {
+        "doc": "docs/gamedev/audio/mixing.md",
+        "anchor": "A3.1",
+        "note": "Audio opens on the first user gesture."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`Audio.startTime` has been removed."
+        }
+      ],
+      "probes": [
+        "audio.first-gesture"
+      ]
+    },
+    {
+      "id": "audio/unlock",
+      "faces": [
+        "audio"
+      ],
+      "title": "AudioContext left suspended",
+      "breaks": "A game or engine change that creates its AudioContext at load without resume() on a gesture stays silent under browser autoplay policy.",
+      "symptom": "silent game, console warning that the AudioContext was not allowed to start",
+      "keywords": [
+        "silent",
+        "no sound",
+        "audiocontext",
+        "autoplay",
+        "not allowed to start",
+        "muted"
+      ],
+      "lanes": [
+        "breadth-first-qa"
+      ],
+      "partialLanes": [
+        "console-errors"
+      ],
+      "source": {
+        "doc": "docs/gamedev/sound.md",
+        "anchor": "## 첫 제스처에서 여는 오디오",
+        "note": "At least one context, resumed after scripted play, zero blocked media."
+      },
+      "engine": [],
+      "probes": [
+        "audio.first-gesture",
+        "audio.hide-return"
+      ]
+    },
+    {
+      "id": "physics/step",
+      "faces": [
+        "physics"
+      ],
+      "title": "Simulation step tied to frame time",
+      "breaks": "When an upgrade changes the render loop or clock, a game that steps physics by frame delta drifts: early frames match, later frames diverge.",
+      "symptom": "first captures match, later captures differ more and more; the replayed route ends somewhere else",
+      "keywords": [
+        "late frame",
+        "later frame",
+        "end somewhere",
+        "drift",
+        "diverg",
+        "jitter",
+        "speed",
+        "collision",
+        "fall through"
+      ],
+      "lanes": [
+        "breadth-first-qa"
+      ],
+      "partialLanes": [
+        "frames",
+        "random-calls"
+      ],
+      "source": {
+        "doc": "docs/gamedev/production/determinism.md",
+        "anchor": "T1.2",
+        "note": "Same seed and same input give the same run; one extra random call shifts every later roll."
+      },
+      "engine": [],
+      "probes": [
+        "physics.frame-rate",
+        "physics.same-seed-twice"
+      ]
+    },
+    {
+      "id": "physics/cannon",
+      "faces": [
+        "physics"
+      ],
+      "title": "CannonPhysics removed",
+      "breaks": "The CannonPhysics addon was removed.",
+      "symptom": "page error naming CannonPhysics, bodies do not move",
+      "keywords": [
+        "cannon",
+        "physics",
+        "rigid body",
+        "bodies"
+      ],
+      "lanes": [
+        "page-errors"
+      ],
+      "partialLanes": [
+        "frames"
+      ],
+      "source": {
+        "doc": "docs/gamedev/design/physics.md",
+        "anchor": "D5.1",
+        "note": "Stacked bodies settle to zero velocity and sleep."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`CannonPhysics` has been removed."
+        }
+      ],
+      "probes": [
+        "physics.settle"
+      ]
+    },
+    {
+      "id": "save/format",
+      "faces": [
+        "save"
+      ],
+      "title": "Save format without a version",
+      "breaks": "An upgrade PR that renames serialized classes or fields (Math to MathUtils, toJSON shapes) breaks saves written by the old build unless the save carries a version and a migration.",
+      "symptom": "progress or settings lost after reload on the head build; JSON parse page error",
+      "keywords": [
+        "save",
+        "progress lost",
+        "reload",
+        "localstorage",
+        "json",
+        "parse",
+        "settings reset"
+      ],
+      "lanes": [
+        "breadth-first-qa"
+      ],
+      "partialLanes": [
+        "page-errors"
+      ],
+      "source": {
+        "doc": "docs/gamedev/systems/save.md",
+        "anchor": "S1.4",
+        "note": "Every JSON the run writes to localStorage carries an integer version; old samples must load."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`Math` has been renamed to `MathUtils`"
+        }
+      ],
+      "probes": [
+        "save.old-version",
+        "save.reload-roundtrip"
+      ]
+    },
+    {
+      "id": "network/cross-machine",
+      "faces": [
+        "network"
+      ],
+      "title": "Results differ across renderers and machines",
+      "breaks": "Float results differ between browsers, GPUs and SwiftShader, so a head build can pass on one renderer and fail on another.",
+      "symptom": "PASS on SwiftShader, FAIL on a GPU or another browser, or the reverse",
+      "keywords": [
+        "gpu",
+        "swiftshader",
+        "browser",
+        "different machine",
+        "renderer",
+        "flaky",
+        "sometimes"
+      ],
+      "lanes": [
+        "breadth-first-qa"
+      ],
+      "partialLanes": [
+        "frames"
+      ],
+      "source": {
+        "doc": "docs/gamedev/social/netcode.md",
+        "anchor": "M2.5",
+        "note": "The same input record must hash the same per step on different browsers and devices."
+      },
+      "engine": [],
+      "probes": [
+        "network.cross-renderer"
+      ]
+    },
+    {
+      "id": "runtime/webgl-context",
+      "faces": [
+        "runtime"
+      ],
+      "title": "WebGL 2 by default, WebGL 1 removed",
+      "breaks": "r118 creates a WebGL 2 context by default, WebGL 1 was deprecated and removed in r163, and SkinnedMesh no longer runs on WebGL 1.",
+      "symptom": "blank or black canvas, context creation error, skinned characters missing on old GPUs",
+      "keywords": [
+        "blank",
+        "black canvas",
+        "webgl",
+        "context",
+        "webgl2",
+        "webgl1",
+        "shader compile",
+        "skinned"
+      ],
+      "lanes": [
+        "no-canvas",
+        "page-errors"
+      ],
+      "partialLanes": [
+        "console-errors",
+        "frames"
+      ],
+      "source": {
+        "doc": "docs/gamedev/render/shaders.md",
+        "anchor": "R3.2",
+        "note": "A material template must compile and draw one frame without errors."
+      },
+      "engine": [
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`WebGLRenderer` automatically creates a WebGL 2 rendering context now"
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "WebGL 1 support in `WebGLRenderer` is now deprecated and will be removed in r163."
+        },
+        {
+          "guide": ".coggs/guides/three-99-162.md",
+          "says": "`SkinnedMesh` is not supported with WebGL 1 anymore."
+        }
+      ],
+      "probes": [
+        "runtime.webgl1"
+      ]
+    }
+  ]
+}

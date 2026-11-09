@@ -1,0 +1,290 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "engine-major",
+      "item": "Engine major-version migration",
+      "hit": "Open one issue and PR per release range, read the migration guide for that range, push fixes until COGGS Auto passes.",
+      "auto": "depth-first-qa proves the game still renders and plays the same.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## Hit과 Auto의 경계",
+        "note": "Engine major migration: Auto proves it is the same game, Hit owns the change."
+      },
+      "detect": [
+        {
+          "file": "hit/guide.mjs",
+          "contains": ""
+        }
+      ]
+    },
+    {
+      "id": "dependency-bump",
+      "item": "Dependency, SDK and engine version bump PRs",
+      "hit": "Bump pinned engine and CDN revisions and open the PR.",
+      "auto": "Plays the PR.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## Hit과 Auto의 경계",
+        "note": "Dependency, SDK and engine bump PRs: Hit owns, Auto proves."
+      },
+      "detect": [
+        {
+          "file": "hit/run.mjs",
+          "contains": "cdnjs"
+        }
+      ]
+    },
+    {
+      "id": "fix-loop",
+      "item": "Root cause and fix commits",
+      "hit": "Read the guide and both versions of the source, commit the fix, rerun Auto.",
+      "auto": "Gives a hypothesis hint only; never names a fix.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## Hit과 Auto의 경계",
+        "note": "Cause finding and fix commits are Hit; Auto gives hints marked hypothesis."
+      },
+      "detect": [
+        {
+          "file": "hit/run.mjs",
+          "contains": "push"
+        }
+      ]
+    },
+    {
+      "id": "needs-human",
+      "item": "Hand over after three failed fixes",
+      "hit": "Label the PR needs-human after three fixes fail.",
+      "auto": "None.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## Hit과 Auto의 경계",
+        "note": "Three failed fixes hand the PR to a person."
+      },
+      "detect": [
+        {
+          "file": "hit/run.mjs",
+          "contains": "needs-human"
+        }
+      ]
+    },
+    {
+      "id": "engine-cve",
+      "item": "Engine security vulnerability",
+      "hit": "Cite the published advisory in the issue, rebuild and redeploy every shipped build (Unity CVE-2025-59489 asked for exactly this).",
+      "auto": "Proves the rebuilt game is the same.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Engine security vulnerability: rebuild and redeploy already shipped games."
+      },
+      "detect": [
+        {
+          "file": "hit/run.mjs",
+          "contains": "advisor"
+        }
+      ]
+    },
+    {
+      "id": "target-api",
+      "item": "Latest recommended Android and iOS SDK",
+      "hit": "Raise target API (35, then 36) and the Xcode version each store requires, fix build failures, permissions and edge-to-edge.",
+      "auto": "Plays the rebuilt app on devices.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 지도",
+        "note": "Follow the latest recommended Android/iOS SDK: target API 36 and 35, Xcode 26."
+      },
+      "detect": []
+    },
+    {
+      "id": "page-size-16kb",
+      "item": "Android 16 KB page sizes",
+      "hit": "Rebuild native libraries aligned for 16 KB pages before publishing is blocked.",
+      "auto": "Plays the rebuilt app on a 16 KB device image.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Android requires 16 KB page support; Unity forum shows publishing blocked by it in 2025."
+      },
+      "detect": []
+    },
+    {
+      "id": "billing-library",
+      "item": "Billing Library version deprecation",
+      "hit": "Move to Play Billing Library 8 by 2026-08-31 and to each later required version.",
+      "auto": "Replays the purchase flow on a test track.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Play requires Billing Library 8 by 2026-08-31."
+      },
+      "detect": []
+    },
+    {
+      "id": "third-party-sdk",
+      "item": "Third-party SDK build conflicts",
+      "hit": "Upgrade or replace each SDK that breaks the build when the target API rises.",
+      "auto": "Plays the rebuilt app.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Every yearly forum snapshot 2023 to 2026 shows third-party SDKs breaking target API raises."
+      },
+      "detect": []
+    },
+    {
+      "id": "privacy-manifest",
+      "item": "Privacy manifest",
+      "hit": "Keep the app and every third-party SDK privacy manifest current.",
+      "auto": "None.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Apple requires a privacy manifest for the app and each third-party SDK."
+      },
+      "detect": []
+    },
+    {
+      "id": "age-rating",
+      "item": "Age rating",
+      "hit": "Answer each store age-rating questionnaire when it changes (Apple asked by 2026-01-31).",
+      "auto": "None.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Apple required new age-rating answers by 2026-01-31; 2026 delistings over ratings appear."
+      },
+      "detect": []
+    },
+    {
+      "id": "android-vitals",
+      "item": "Android vitals",
+      "hit": "Watch crash and ANR rates against the store thresholds and answer regressions.",
+      "auto": "Reproduces a reported crash from its inputs.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Play ties crash and ANR thresholds to store visibility."
+      },
+      "detect": []
+    },
+    {
+      "id": "pre-launch",
+      "item": "Pre-launch report and real-device testing",
+      "hit": "Schedule the store pre-launch crawl and device-farm runs and read them before release.",
+      "auto": "Plays on the device pool.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Play runs a pre-launch crawl on its device lab for every uploaded build."
+      },
+      "detect": []
+    },
+    {
+      "id": "hardware-compat",
+      "item": "Hardware compatibility",
+      "hit": "Keep declared hardware true to what the build runs on.",
+      "auto": "Plays on the declared hardware.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "Apple and Play reject builds that do not run on the hardware they claim."
+      },
+      "detect": []
+    },
+    {
+      "id": "store-submission",
+      "item": "Store submission, rejection and resubmission, metadata",
+      "hit": "Submit, read the rejection, fix and resubmit; keep metadata accurate.",
+      "auto": "None.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## Hit과 Auto의 경계",
+        "note": "Store submission, resubmission, metadata, age rating and privacy manifest are Hit."
+      },
+      "detect": []
+    },
+    {
+      "id": "closed-test",
+      "item": "Closed test with 12 testers for 14 days",
+      "hit": "Run the closed test before production on a personal developer account; an organization account is outside the rule.",
+      "auto": "None.",
+      "humanGate": true,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 사람만 통과하는 관문",
+        "note": "Personal accounts made after 2023-11-13 need 12 opted-in testers for 14 days before production."
+      },
+      "detect": []
+    },
+    {
+      "id": "developer-account",
+      "item": "Developer account upkeep",
+      "hit": "Keep developer identity and contact current; a person reads the account mail and enters the one-time code.",
+      "auto": "None.",
+      "humanGate": true,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 사람만 통과하는 관문",
+        "note": "Unverified contact details restrict the account and its apps."
+      },
+      "detect": []
+    },
+    {
+      "id": "multiplatform",
+      "item": "Multiplatform",
+      "hit": "Test every platform a build shipped to on every update.",
+      "auto": "Plays each platform build.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "The standard asks for testing on every platform the game shipped to."
+      },
+      "detect": []
+    },
+    {
+      "id": "reliability",
+      "item": "Reliability",
+      "hit": "Keep login, download and network paths available, fault tolerant and recoverable.",
+      "auto": "Plays with outside hosts blocked (network.offline-assets).",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "ISO 25010 reliability: availability, fault tolerance, recovery."
+      },
+      "detect": []
+    },
+    {
+      "id": "analytics",
+      "item": "Analytics",
+      "hit": "Keep behaviour analytics wired through each upgrade.",
+      "auto": "None.",
+      "humanGate": false,
+      "source": {
+        "doc": "docs/products/coggs/frontier/UPKEEP.md",
+        "anchor": "## 더한 갈래",
+        "note": "The survey treats behaviour analytics as a test layer."
+      },
+      "detect": []
+    }
+  ]
+}
