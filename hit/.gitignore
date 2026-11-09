@@ -1,0 +1,3 @@
+# Downloaded verdict artifacts and lesson drafts; the per-PR attempt logs (out/<pr>.jsonl) stay tracked.
+out/*/
+out/local-*.jsonl
