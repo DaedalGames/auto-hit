@@ -1,9 +1,10 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js';
 
-import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
+import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/loaders/FBXLoader.js';
 
 import {finite_state_machine} from './finite-state-machine.js';
 import {entity} from './entity.js';
+import {gltf_component} from './gltf-component.js';
 import {player_entity} from './player-entity.js'
 import {player_state} from './player-state.js';
 
@@ -84,6 +85,7 @@ export const npc_entity = (() => {
       const loader = new FBXLoader();
       loader.setPath('./resources/monsters/FBX/');
       loader.load(this._params.resourceName, (glb) => {
+        gltf_component.RestoreFBXColors(glb);
         this._target = glb;
         this._params.scene.add(this._target);
 
@@ -93,7 +95,7 @@ export const npc_entity = (() => {
         const texLoader = new THREE.TextureLoader();
         const texture = texLoader.load(
             './resources/monsters/Textures/' + this._params.resourceTexture);
-        texture.encoding = THREE.sRGBEncoding;
+        texture.colorSpace = THREE.SRGBColorSpace;
         texture.flipY = true;
 
         this._target.traverse(c => {

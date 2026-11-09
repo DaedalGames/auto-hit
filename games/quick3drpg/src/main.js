@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118.1/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js';
 
 import {third_person_camera} from './third-person-camera.js';
 import {entity_manager} from './entity-manager.js';
@@ -52,11 +52,13 @@ class HackNSlashDemo {
   }
 
   _Initialize() {
+    THREE.ColorManagement.enabled = false;
     this._threejs = new THREE.WebGLRenderer({
       antialias: true,
     });
     this._threejs.outputEncoding = THREE.sRGBEncoding;
     this._threejs.gammaFactor = 2.2;
+    this._threejs.useLegacyLights = true;
     this._threejs.shadowMap.enabled = true;
     this._threejs.shadowMap.type = THREE.PCFSoftShadowMap;
     this._threejs.setPixelRatio(window.devicePixelRatio);
@@ -143,7 +145,7 @@ class HackNSlashDemo {
 
     this._scene.fog.color.copy(uniforms["bottomColor"].value);
 
-    const skyGeo = new THREE.SphereBufferGeometry(1000, 32, 15);
+    const skyGeo = new THREE.SphereGeometry(1000, 32, 15);
     const skyMat = new THREE.ShaderMaterial({
         uniforms: uniforms,
         vertexShader: _VS,
