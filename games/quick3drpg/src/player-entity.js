@@ -84,7 +84,7 @@ export const player_entity = (() => {
           c.castShadow = true;
           c.receiveShadow = true;
           if (c.material && c.material.map) {
-            c.material.map.encoding = THREE.sRGBEncoding;
+            c.material.map.colorSpace = THREE.SRGBColorSpace;
           }
         });
 

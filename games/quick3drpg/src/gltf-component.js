@@ -80,7 +80,7 @@ export const gltf_component = (() => {
       if (this._params.resourceTexture) {
         const texLoader = new THREE.TextureLoader();
         texture = texLoader.load(this._params.resourceTexture);
-        texture.encoding = THREE.sRGBEncoding;
+        texture.colorSpace = THREE.SRGBColorSpace;
       }
 
       this._target.traverse(c => {
@@ -183,7 +183,7 @@ export const gltf_component = (() => {
       if (this._params.resourceTexture) {
         const texLoader = new THREE.TextureLoader();
         texture = texLoader.load(this._params.resourceTexture);
-        texture.encoding = THREE.sRGBEncoding;
+        texture.colorSpace = THREE.SRGBColorSpace;
       }
 
       this._target.traverse(c => {

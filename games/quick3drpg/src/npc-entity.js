@@ -95,7 +95,7 @@ export const npc_entity = (() => {
         const texLoader = new THREE.TextureLoader();
         const texture = texLoader.load(
             './resources/monsters/Textures/' + this._params.resourceTexture);
-        texture.encoding = THREE.sRGBEncoding;
+        texture.colorSpace = THREE.SRGBColorSpace;
         texture.flipY = true;
 
         this._target.traverse(c => {
