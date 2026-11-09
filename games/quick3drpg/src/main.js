@@ -52,6 +52,7 @@ class HackNSlashDemo {
   }
 
   _Initialize() {
+    THREE.ColorManagement.enabled = false;
     this._threejs = new THREE.WebGLRenderer({
       antialias: true,
     });
