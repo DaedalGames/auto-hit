@@ -3,6 +3,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.m
 import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/loaders/FBXLoader.js';
 
 import {entity} from './entity.js';
+import {gltf_component} from './gltf-component.js';
 import {finite_state_machine} from './finite-state-machine.js';
 import {player_state} from './player-state.js';
 
@@ -68,6 +69,7 @@ export const player_entity = (() => {
       const loader = new FBXLoader();
       loader.setPath('./resources/guard/');
       loader.load('castle_guard_01.fbx', (fbx) => {
+        gltf_component.RestoreFBXColors(fbx);
         this._target = fbx;
         this._target.scale.setScalar(0.035);
         this._params.scene.add(this._target);

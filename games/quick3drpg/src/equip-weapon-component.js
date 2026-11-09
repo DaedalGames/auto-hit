@@ -1,4 +1,5 @@
 import {entity} from './entity.js';
+import {gltf_component} from './gltf-component.js';
 
 import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/loaders/FBXLoader.js';
 
@@ -62,6 +63,7 @@ export const equip_weapon_component = (() => {
       const loader = new FBXLoader();
       loader.setPath('./resources/weapons/FBX/');
       loader.load(item.RenderParams.name + '.fbx', (fbx) => {
+        gltf_component.RestoreFBXColors(fbx);
         this._target = fbx;
         this._target.scale.setScalar(item.RenderParams.scale);
         this._target.rotateY(Math.PI);

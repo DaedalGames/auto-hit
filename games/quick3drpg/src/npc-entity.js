@@ -4,6 +4,7 @@ import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm
 
 import {finite_state_machine} from './finite-state-machine.js';
 import {entity} from './entity.js';
+import {gltf_component} from './gltf-component.js';
 import {player_entity} from './player-entity.js'
 import {player_state} from './player-state.js';
 
@@ -84,6 +85,7 @@ export const npc_entity = (() => {
       const loader = new FBXLoader();
       loader.setPath('./resources/monsters/FBX/');
       loader.load(this._params.resourceName, (glb) => {
+        gltf_component.RestoreFBXColors(glb);
         this._target = glb;
         this._params.scene.add(this._target);
 

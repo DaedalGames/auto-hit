@@ -8,6 +8,37 @@ import {entity} from './entity.js';
 
 export const gltf_component = (() => {
 
+  // r162's FBXLoader converts FBX material and vertex colors sRGB -> linear
+  // (unconditionally); r118's used them as-is. Undo it to keep r118's look.
+  function _RestoreFBXColors(obj) {
+    const seen = new Set();
+    obj.traverse(c => {
+      const materials = c.material instanceof Array ? c.material : [c.material];
+      for (let m of materials) {
+        if (!m || seen.has(m)) {
+          continue;
+        }
+        seen.add(m);
+        for (let k of ['color', 'emissive', 'specular']) {
+          if (m[k] && m[k].isColor) {
+            m[k].convertLinearToSRGB();
+          }
+        }
+      }
+      const colors = c.geometry && c.geometry.attributes && c.geometry.attributes.color;
+      if (colors && !seen.has(colors)) {
+        seen.add(colors);
+        const tmp = new THREE.Color();
+        for (let i = 0; i < colors.count; ++i) {
+          tmp.setRGB(colors.getX(i), colors.getY(i), colors.getZ(i));
+          tmp.convertLinearToSRGB();
+          colors.setXYZ(i, tmp.r, tmp.g, tmp.b);
+        }
+        colors.needsUpdate = true;
+      }
+    });
+  }
+
   class StaticModelComponent extends entity.Component {
     constructor(params) {
       super();
@@ -95,6 +126,7 @@ export const gltf_component = (() => {
       const loader = new FBXLoader();
       loader.setPath(this._params.resourcePath);
       loader.load(this._params.resourceName, (fbx) => {
+        _RestoreFBXColors(fbx);
         this._OnLoaded(fbx);
       });
     }
@@ -216,6 +248,7 @@ export const gltf_component = (() => {
       const loader = new FBXLoader();
       loader.setPath(this._params.resourcePath);
       loader.load(this._params.resourceName, (fbx) => {
+        _RestoreFBXColors(fbx);
         this._OnLoaded(fbx);
       });
     }
@@ -231,6 +264,7 @@ export const gltf_component = (() => {
   return {
       StaticModelComponent: StaticModelComponent,
       AnimatedModelComponent: AnimatedModelComponent,
+      RestoreFBXColors: _RestoreFBXColors,
   };
 
 })();
