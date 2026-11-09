@@ -6,7 +6,7 @@ import {math} from './math.js';
 
 export const health_bar = (() => {
 
-  const _VS = `#version 300 es
+  const _VS = `
 varying vec2 vUV;
 
 void main() {
@@ -16,7 +16,7 @@ void main() {
 }
 `;
 
-  const _PS = `#version 300 es
+  const _PS = `
 uniform vec3 colour;
 uniform float health;
 
@@ -49,6 +49,7 @@ class HealthBar extends entity.Component {
       uniforms: uniforms,
       vertexShader: _VS,
       fragmentShader: _PS,
+      glslVersion: THREE.GLSL3,
       blending: THREE.NormalBlending,
       transparent: true,
       depthTest: false,
