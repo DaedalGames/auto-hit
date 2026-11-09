@@ -57,6 +57,7 @@ class HackNSlashDemo {
     });
     this._threejs.outputEncoding = THREE.sRGBEncoding;
     this._threejs.gammaFactor = 2.2;
+    this._threejs.useLegacyLights = true;
     this._threejs.shadowMap.enabled = true;
     this._threejs.shadowMap.type = THREE.PCFSoftShadowMap;
     this._threejs.setPixelRatio(window.devicePixelRatio);
