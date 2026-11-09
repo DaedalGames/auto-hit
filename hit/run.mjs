@@ -23,7 +23,18 @@ const MARKER = '<!-- coggs-hit -->';
 const FORBIDDEN = ['.github/', '.coggs/', 'auto/', 'hit/', 'tools/', 'brain/'];
 
 // Spawns without a console window and kills the whole tree when the deadline passes.
-export function sh(cmd, args, { cwd = HIT_ROOT, input, timeoutMs = 120000, allowFail = false } = {}) {
+// A gh call that dies in transport (a dropped Wi-Fi socket) is retried; any other failure is final.
+const TRANSPORT = /wsarecv|ECONNRESET|ETIMEDOUT|ENOTFOUND|connection (was )?(reset|aborted|refused)|TLS handshake|unexpected EOF|i\/o timeout/i;
+export async function sh(cmd, args, opts = {}) {
+  for (let i = 0; ; i++) {
+    const r = await shOnce(cmd, args, { ...opts, allowFail: true });
+    if (cmd === 'gh' && r.code !== 0 && TRANSPORT.test(r.stderr) && i < 3) { await new Promise((res) => setTimeout(res, 5000 * (i + 1))); continue; }
+    if ((r.code !== 0 || r.timedOut) && !opts.allowFail) throw new Error(cmd + ' ' + args.join(' ') + (r.timedOut ? ' timed out' : ' exited ' + r.code) + '\n' + r.stderr);
+    return r;
+  }
+}
+
+function shOnce(cmd, args, { cwd = HIT_ROOT, input, timeoutMs = 120000, allowFail = false } = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, { cwd, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
     let stdout = '', stderr = '', timedOut = false;
@@ -555,11 +566,15 @@ export async function main(a) {
       await git(wt, 'commit', '-m', 'build(deps): bump ' + dep + ' from ' + from + ' to ' + to + ' in ' + path.basename(game));
     }
     const sha = await pushBranch(wt, branch);
-    const f = await bodyFile('pr-new-body.local.md', prBody({ game, dep, from, to, issue }));
-    await ensureLabel(ghRepo, 'dependencies', '0366d6', 'Pull requests that update a dependency file');
-    const r = await sh('gh', ['pr', 'create', '-R', ghRepo, '--base', 'main', '--head', branch, '--title', title, '--body-file', f, '--label', 'dependencies'], { cwd: wt });
-    fs.rmSync(f);
-    const url = r.stdout.trim().split('\n').pop();
+    const openPr = JSON.parse((await sh('gh', ['pr', 'list', '-R', ghRepo, '--head', branch, '--state', 'open', '--json', 'url'])).stdout);
+    let url = openPr[0]?.url;
+    if (!url) {
+      const f = await bodyFile('pr-new-body.local.md', prBody({ game, dep, from, to, issue }));
+      await ensureLabel(ghRepo, 'dependencies', '0366d6', 'Pull requests that update a dependency file');
+      const r = await sh('gh', ['pr', 'create', '-R', ghRepo, '--base', 'main', '--head', branch, '--title', title, '--body-file', f, '--label', 'dependencies'], { cwd: wt });
+      fs.rmSync(f);
+      url = r.stdout.trim().split('\n').pop();
+    }
     pr = Number(url.split('/').pop());
     console.log('PR ' + url);
     const pending = path.join(repo, 'hit', 'out', 'pending-' + path.basename(game) + '.jsonl');
@@ -645,4 +660,5 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import
   }
   process.exitCode = await main(a);
 }
+
 
