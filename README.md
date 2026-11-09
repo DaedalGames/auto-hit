@@ -18,7 +18,7 @@ Built at c0mpiled-17 Seoul, 2026-11-09, for the Self-Maintaining APIs track.
 
 | Game | Issue | Upgrade pull request | Play verdict |
 | --- | --- | --- | --- |
-| Quick 3D RPG, three.js r118 → r162 | [#2](https://github.com/DaedalGames/auto-hit/issues/2) | [#3](https://github.com/DaedalGames/auto-hit/pull/3) · open | [Auto verdict](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730924781) |
+| Quick 3D RPG, three.js r118 → r162 | [#2](https://github.com/DaedalGames/auto-hit/issues/2) · closed | [#3](https://github.com/DaedalGames/auto-hit/pull/3) · merged | [PASS](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730924781) at 0.01–0.04% differ after [7 fixes](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730962200); brain enabled for fix 7 |
 | Crossy Road, three.js r99 → r162 | [#4](https://github.com/DaedalGames/auto-hit/issues/4) · closed | [#5](https://github.com/DaedalGames/auto-hit/pull/5) · merged | [PASS](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731006844) after [4 fixes](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6730986797), max 0.10% differ |
 
 ## Why play the upgrade?
