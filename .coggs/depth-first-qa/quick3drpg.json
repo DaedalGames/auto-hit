@@ -1,0 +1,33 @@
+{
+  "game": "quick3drpg",
+  "url": "index.html",
+  "canvas": "#threejs",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "ready": {
+    "canvas": true,
+    "quietMs": 3000
+  },
+  "seeds": {
+    "game": 20261109,
+    "three": 118162
+  },
+  "steps": 180,
+  "capture": [
+    1,
+    60,
+    120,
+    180
+  ],
+  "inputs": [
+    {
+      "key": "w",
+      "down": 61,
+      "up": 150,
+      "why": "Walks the knight forward for 90 steps, so the third-person camera sweeps past the trees, clouds and monsters scattered around the spawn and frame 120 sees them mid-stride."
+    }
+  ],
+  "why": "Frame 1 is the spawn view with sky, ground, knight and the UI bar; 60 is the idle pose after the load transient; 120 is mid-walk; 180 is the settled view after the walk stops."
+}
