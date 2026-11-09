@@ -2,9 +2,9 @@
 
 COGGS Hit upgrades your game; COGGS Auto plays the pull request and catches what a code diff cannot show.
 
-[![The upgraded game passes the replay comparison](docs/media/upgrade-preview.gif)](docs/media/upgrade.mp4)
+https://github.com/user-attachments/assets/bfadca95-e7ce-475b-a14c-06f1c2069fe2
 
-[Watch the 30-second upgrade replay](docs/media/upgrade.mp4) · [See a real CI verdict](https://github.com/DaedalGames/auto-hit/pull/1#issuecomment-6730606274) · Final demo: **TODO(live)**
+The 30-second replay above: a version bump draws a black screen, two fixes still differ, the third passes at 0.02% of pixels. [See a real CI verdict](https://github.com/DaedalGames/auto-hit/pull/1#issuecomment-6730606274) · Final demo: **TODO(live)**
 
 Built at c0mpiled-17 Seoul, 2026-11-09, for the Self-Maintaining APIs track.
 
