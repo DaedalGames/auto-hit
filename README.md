@@ -27,8 +27,8 @@ Built at c0mpiled-17 Seoul, 2026-11-09, for the Self-Maintaining APIs track.
 
 | Game | Issue | Upgrade pull request | Play verdict |
 | --- | --- | --- | --- |
-| Quick 3D RPG, three.js r118 → r162 | [#2](https://github.com/DaedalGames/auto-hit/issues/2) · closed | [#3](https://github.com/DaedalGames/auto-hit/pull/3) · merged | [PASS](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730924781) at 0.01–0.04% differ after [7 fixes](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730962200); brain enabled for fix 7 |
-| Crossy Road, three.js r99 → r162 | [#4](https://github.com/DaedalGames/auto-hit/issues/4) · closed | [#5](https://github.com/DaedalGames/auto-hit/pull/5) · merged | [PASS](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731006844) after [4 fixes](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6730986797), max 0.10% differ |
+| Quick 3D RPG, three.js r118 → r162 | [#2](https://github.com/DaedalGames/auto-hit/issues/2), closed | [#3](https://github.com/DaedalGames/auto-hit/pull/3), merged | [PASS](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730924781) at 0.01–0.04% differ after [7 fixes](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730962200); brain enabled for fix 7 |
+| Crossy Road, three.js r99 → r162 | [#4](https://github.com/DaedalGames/auto-hit/issues/4), closed | [#5](https://github.com/DaedalGames/auto-hit/pull/5), merged | [PASS](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731006844) after [4 fixes](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6730986797), max 0.10% differ |
 
 ## Why play the upgrade?
 
@@ -36,13 +36,13 @@ Built at c0mpiled-17 Seoul, 2026-11-09, for the Self-Maintaining APIs track.
 | --- | --- | --- |
 | A. Version bump only | The game shows a black screen: `Failed to resolve module specifier three`. CodeQL and code analysis still pass; only COGGS Auto fails it. | [PR #1 checks](https://github.com/DaedalGames/auto-hit/pull/1/checks) and [Auto's verdict](https://github.com/DaedalGames/auto-hit/pull/1#issuecomment-6730606274) |
 | B. Bump + code review | The scoped review identified texture color-space and lighting regressions; open-code-review flagged two texture encoding bugs. It did not run exploratory play. | [Quick 3D RPG review](https://github.com/DaedalGames/auto-hit/pull/3#issuecomment-6730990776); [Crossy Road review](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731253101). |
-| C. Hit + Auto | Crossy Road passed after four fixes, with a maximum 0.10% difference across the sampled frames. The independent Quick 3D RPG probe passed four frames after three fixes at 0.0202–0.0393%. | [Crossy Road verdict](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731006844) and [fix history](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6730986797); [probe measurements](docs/media/probe-results.json) (`diffs.r118-a vs r162-fix3-a`). |
+| C. Hit + Auto | The independent Quick 3D RPG probe passed four frames after three fixes at 0.0202–0.0393%. | [Crossy Road verdict](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6731006844) and [fix history](https://github.com/DaedalGames/auto-hit/pull/5#issuecomment-6730986797); [probe measurements](docs/media/probe-results.json) (`diffs.r118-a vs r162-fix3-a`). |
 
 The standalone probe compares four frames at steps 1, 60, 120 and 180 against a 0.1% pixel-difference limit. A twice-run baseline differed by **0 pixels** at those frames. The pass is not a claim about every frame: the same capture exceeded the limit at steps 6 and 8. The real CI comment is a separate run; its verdict is the evidence for that PR.
 
 ## The advantage
 
-- **Deterministic replay:** the same inputs, seeded randomness and controlled clock make before-and-after frames comparable. The twice-run baseline is in the [probe data](docs/media/probe-results.json).
+- **Deterministic replay:** the same inputs, seeded randomness and controlled clock make before-and-after frames comparable.
 - **A play oracle:** Auto runs the game, captures frames and reports pixel differences, including failures that are invisible in a code diff. It checks the recorded route and sampled frames, not every possible playthrough.
 - **Memory across games:** every fix that reaches PASS becomes a lesson in [brain/lessons/](brain/lessons/) (15 after today's two upgrades), and Hit queries them through `tools/brain.mjs` before every fix. How many attempts it saves is not measured yet.
 
