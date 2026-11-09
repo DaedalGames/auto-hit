@@ -1,4 +1,7 @@
-const counterDOM = document.getElementById('counter');  
+// three r152+ turns color management on by default; r99 had none. Must run before any material is created.
+THREE.ColorManagement.enabled = false;
+
+const counterDOM = document.getElementById('counter');
 const endDOM = document.getElementById('end');  
 
 const scene = new THREE.Scene();
@@ -127,6 +130,9 @@ const renderer = new THREE.WebGLRenderer({
   alpha: true,
   antialias: true
 });
+// Restore r99 defaults: linear output (gammaOutput = false) and non-physical light intensities.
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+renderer.useLegacyLights = true;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize( window.innerWidth, window.innerHeight );
