@@ -53,8 +53,13 @@
   Made with <i class="fas fa-heart"></i> & 🐓
 </div>
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/99/three.min.js'></script>
-  <script  src="./script.js"></script>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js';
+    window.THREE = THREE;
+    const game = document.createElement('script');
+    game.src = './script.js';
+    document.body.appendChild(game);
+  </script>
 
 </body>
 </html>
