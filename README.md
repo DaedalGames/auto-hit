@@ -71,7 +71,7 @@ node hit/run.mjs --game games/quick3drpg --dep three --from 0.118.1 --to 0.162.0
 2. It opens the pull request that fixes the issue (`Fixes #n`); its first commit changes only the version strings.
 3. Each COGGS Auto FAIL on the head commit starts one `claude -p` call (10 minute limit, file tools only) that follows [.coggs/hit.md](.coggs/hit.md), reads the verdict and the guide in [.coggs/guides/](.coggs/guides/), edits the game folder and names the cause, the evidence and the source. Hit commits that as one `fix(hit): <cause>` commit with `Evidence:` and `Source:` lines; a call that edits outside the game folder or names no cause is undone.
 4. One COGGS Hit status comment on the pull request is edited in place after every step.
-5. On PASS it squash-merges as `<title> (#n)`, which closes the issue, deletes the branch and reads the link back. After 6 fixes without PASS (`--max-fixes`, counted over the fix commits on the branch) it labels the pull request `needs-human` instead.
+5. On PASS it squash-merges as `<title> (#n)`, which closes the issue, keeps the branch as the archive of every attempt, and reads the link back; `--no-merge` stops at PASS instead. After 6 fixes without PASS (`--max-fixes`, counted over the fix commits on the branch) it labels the pull request `needs-human`.
 
 Every step is a line in `hit/out/<pr>.jsonl`, including attempts to PASS. Without `--no-brain`, Hit asks `tools/brain.mjs` for causes found in earlier games before each fix and adds one lesson per fix commit after PASS. `--pr <n>` resumes an open pull request, and `node hit/guide.mjs --dep three --from <v> --to <v>` refetches a guide from the three.js wiki.
 

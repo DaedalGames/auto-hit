@@ -6,6 +6,7 @@
 // push starts the COGGS Auto workflow in GitHub Actions.
 // Usage: node hit/run.mjs --game games/<name> --dep three --from <v> --to <v>
 //          [--repo DaedalGames/auto-hit] [--pr <n>] [--max-fixes 6] [--no-brain] [--no-merge]
+// On PASS Hit squash-merges and keeps the branch as an archive; --no-merge stops at PASS instead.
 // The cap counts fix(hit) commits on the branch, so resuming a PR with 3 fixes and a cap of 6 allows 3 more.
 //        node hit/run.mjs ... --local --verdict <file> [--branch <name>]   one fix on a local branch, nothing pushed
 import { spawn } from 'node:child_process';
@@ -219,10 +220,15 @@ export async function ontologyRoute(verdict, game, log, attempt) {
   if (!fs.existsSync(tool)) { log({ kind: 'ontology', note: 'tools/ontology.mjs not on this checkout, skipped' }); return null; }
   const g = gameVerdict(verdict, game);
   const failing = (g.frames || []).filter((f) => f.pass === false || (typeof f.differPct === 'number' && f.differPct > 0.1));
-  const query = [
-    ...failing.map((f) => 'step ' + f.step + ' ' + (typeof f.differPct === 'number' ? f.differPct + '% of pixels differ, mean luma ' + f.headLuma + ' against ' + f.baseLuma : 'no frame')),
-    ...(g.newPageErrors || []).map(text),
-  ].join('; ').slice(0, 1500);
+  // The route matches symptom words, so each failing frame is described in words read from its numbers.
+  const words = (f) => {
+    if (typeof f.differPct !== 'number') return 'no frame captured, the game does not start';
+    const d = f.headLuma - f.baseLuma;
+    const tone = d < -1 ? 'the frame is darker' : d > 1 ? 'the frame is brighter, washed out' : 'colors differ slightly at the same brightness';
+    const reach = f.differPct > 50 ? 'across the whole frame' : f.differPct > 1 ? 'on part of the frame' : 'on a few pixels, edges and small details';
+    return 'step ' + f.step + ': ' + tone + ' ' + reach + ', ' + f.differPct + '% of pixels differ, mean luma ' + f.headLuma + ' against ' + f.baseLuma;
+  };
+  const query = [...failing.map(words), ...(g.newPageErrors || []).map(text)].join('; ').slice(0, 1500);
   if (!query) return null;
   const r = await sh(process.execPath, [tool, 'route', query], { allowFail: true, timeoutMs: 60000 });
   if (r.code === 1) { log({ kind: 'ontology', attempt, used: false, note: 'no face matched' }); return null; }
@@ -530,16 +536,15 @@ async function writeLessons({ wt, base, pr, game, dep, from, to, logFile, log })
   return shas.length;
 }
 
-// Squash-merge with a conventional "<title> (#n)" subject, delete the branch, and read the issue link back.
+// Squash-merge with a conventional "<title> (#n)" subject, keep the branch, and read the issue link back.
 async function mergeAndClose({ repo, pr, issue, title, wt, base, branch, log }) {
   const subjects = (await git(wt, 'log', '--reverse', '--format=%s', base + '..HEAD')).split('\n').filter(Boolean);
   const f = await bodyFile('pr-' + pr + '-squash.local.md', subjects.map((s) => '- ' + s).join('\n') + '\n\nFixes #' + issue.number + '\n');
   await sh('gh', ['pr', 'merge', String(pr), '-R', repo, '--squash', '--subject', title + ' (#' + pr + ')', '--body-file', f]);
   fs.rmSync(f);
   const merged = JSON.parse((await sh('gh', ['pr', 'view', String(pr), '-R', repo, '--json', 'state,mergeCommit,url'])).stdout);
-  await sh('gh', ['api', '-X', 'DELETE', 'repos/' + repo + '/git/refs/heads/' + branch], { allowFail: true });
+  // The branch stays on the remote as the archive of every attempt; only the local worktree goes.
   await sh('git', ['worktree', 'remove', '--force', wt], { cwd: HIT_ROOT, allowFail: true });
-  await sh('git', ['branch', '-D', branch], { cwd: HIT_ROOT, allowFail: true });
   let link;
   for (let i = 0; i < 12; i++) {
     link = JSON.parse((await sh('gh', ['issue', 'view', String(issue.number), '-R', repo, '--json', 'state,closedByPullRequestsReferences,url'])).stdout);
@@ -666,7 +671,7 @@ export async function main(a) {
         await editPrBody(ghRepo, pr, prBody({ game, dep, from, to, issue, first, last: s }));
         const lessons = useBrain ? await writeLessons({ wt, base, pr, game, dep, from, to, logFile, log }) : 0;
         log({ kind: 'pass', pr, game: path.basename(game), dep, from, to, attemptsToPass: fixes, brain: useBrain, lessons });
-        await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: '✅ PASS after ' + fixes + ' fix' + (fixes === 1 ? '' : 'es'), note: 'Every frame matches ' + rel(from) + ' within 0.1%. Squash-merging closes #' + issue.number + '.' }));
+        await upsertStatus(ghRepo, pr, statusBody({ dep, from, to, rows, state: (!a['no-merge'] ? '✅ PASS after ' : '✅ PASS · ready to merge · ') + fixes + ' fix' + (fixes === 1 ? '' : 'es'), note: 'Every frame matches ' + rel(from) + ' within 0.1%. ' + (!a['no-merge'] ? 'Squash-merging closes #' + issue.number + '.' : 'Merging closes #' + issue.number + '.') }));
         if (a['no-merge']) return 0;
         await mergeAndClose({ repo: ghRepo, pr, issue, title, wt, base, branch: prBranch, log });
         return 0;
@@ -714,6 +719,9 @@ if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import
   }
   process.exitCode = await main(a);
 }
+
+
+
 
 
 
