@@ -1,3 +1,9 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/banner/banner-dark@2x.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/media/banner/banner-light@2x.png">
+  <img alt="COGGS Hit writes the fix PR and hands it to COGGS Auto, which plays it, judges it and hands the verdict back" src="docs/media/banner/banner-light@2x.png" width="100%">
+</picture>
+
 # COGGS Hit + COGGS Auto
 
 COGGS Hit upgrades your game; COGGS Auto plays the pull request and catches what a code diff cannot show.
