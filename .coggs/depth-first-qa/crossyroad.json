@@ -1,0 +1,87 @@
+{
+  "game": "crossyroad",
+  "url": "index.html",
+  "canvas": "canvas",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "ready": {
+    "canvas": true,
+    "quietMs": 3000
+  },
+  "seeds": {
+    "game": 20261109,
+    "three": 99118
+  },
+  "steps": 180,
+  "capture": [
+    1,
+    60,
+    120,
+    180
+  ],
+  "inputs": [
+    {
+      "key": "ArrowLeft",
+      "down": 20,
+      "up": 22,
+      "why": "Steps the chicken one column left onto column 7, the one column free of trees in every forest lane this seed lays out."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 32,
+      "up": 34,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 44,
+      "up": 46,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 56,
+      "up": 58,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 68,
+      "up": 70,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 80,
+      "up": 82,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 92,
+      "up": 94,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 104,
+      "up": 106,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 116,
+      "up": 118,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    },
+    {
+      "key": "ArrowUp",
+      "down": 128,
+      "up": 130,
+      "why": "Hops one lane forward; one hop takes 12 steps (200 ms), so the camera follows the chicken across road, forest and truck lanes."
+    }
+  ],
+  "why": "Frame 1 is the start field; 60 is three lanes up among the trees; 120 is past the car lane; 180 is the settled view nine lanes ahead with traffic in view."
+}
